@@ -1,0 +1,11 @@
+world
+{
+	"classname" "worldspawn"
+	"spawnflags" "0"
+	"mapversion" "0"
+	"id" "0"
+	"skyname" "sky_day01_01"
+}
+cameras
+{
+}
