@@ -1,5 +1,5 @@
-# map.py
-# Package: vmflib
+# vmf.py
+# Project: vmflib
 # Author: Stephen Eisenhauer (mail@stepheneisenhauer.com)
 # 
 # Represents a map using VMF (Valve Map Format).
@@ -7,8 +7,40 @@
 # as a VMF file (plain text) to be compiled and loaded into a game.
 # 
 # More info:
+# https://github.com/BHSPitMonkey/vmflib
 # https://developer.valvesoftware.com/wiki/VMF_documentation
 # https://developer.valvesoftware.com/wiki/VMF_documentation:_World_Class
+
+########################################################################
+### These classes define the data types used by property values in a ###
+### VMF map. They can be used later inside "properties" dicts.       ###
+########################################################################
+
+class Vertex:
+	"""An XYZ location given by 3 decimal values separated by spaces"""
+	
+	def __init__(self, x=0, y=0, z=0):
+		self.x = x
+		self.y = y
+		self.z = z
+	
+	def __repr__(self):
+		return '(%s %s %s)' % (self.x, self.y, self.z)
+
+
+class Bool:
+	"""A boolean value rendered as a 0 or 1"""
+	
+	def __init__(self, state=False):
+		self.state = state
+	
+	def __repr__(self):
+		return str(int(bool(self.state)))
+
+
+###############################################################################
+### This is a base class for the VMF "Classes" we will define further down. ###
+###############################################################################
 
 class Group:
 	"""A class representing a key-value group in the VMF KeyValues structure"""
@@ -48,6 +80,7 @@ class Group:
 		
 		return string
 
+
 ########################################################################
 ### These classes define the various "Classes" (groups) found in a   ###
 ### VMF map. They derive from the Group class.                       ###
@@ -58,7 +91,7 @@ class VersionInfo(Group):
 	classname = 'versioninfo'
 
 	def __init__(self):
-		Group.__init__(self)			# Call superclass initializer
+		Group.__init__(self)
 		
 		p = self.properties
 		p['editorversion'] = 0
@@ -71,9 +104,27 @@ class VisGroups(Group):
 	"""A class representing the versioninfo section of a Valve Map"""
 	classname = 'visgroups'
 
+
 class Cameras(Group):
 	"""A class representing the cameras section of a Valve Map"""
 	classname = 'cameras'
+
+
+class Cordon(Group):
+	"""A class representing the cordon section of a Valve Map"""
+	classname = 'cordon'
+	
+	def __init__(self):
+		Group.__init__(self)
+		self.mins = Vertex(99999, 99999, 99999)
+		self.maxs = Vertex(-99999, -99999, -99999)
+		self.active = Bool(0)
+		
+		p = self.properties
+		p['mins'] = self.mins
+		p['maxs'] = self.maxs
+		p['active'] = self.active
+
 
 class Entity(Group):
 	"""A class representing an entity class in a Valve Map"""
@@ -81,13 +132,14 @@ class Entity(Group):
 	entitycount = 0
 	
 	def __init__(self, class_name, entity_type):
-		Group.__init__(self)			# Call superclass initializer
+		Group.__init__(self)
 		
 		p = self.properties
 		p['id'] = Entity.entitycount
-		Entity.entitycount += 1			# Increment world counter
+		Entity.entitycount += 1			# Increment entity counter
 		p['classname'] = class_name		# Must be provided
 		p['spawnflags'] = 0
+
 
 # Tip: After instantiating a World object, put a bunch of Solids into its children list.
 class World(Entity):
@@ -107,6 +159,7 @@ class World(Entity):
 		
 		c = self.children
 		# TODO: Solid, Hidden, Group
+
 
 ########################################################################
 ### The class you'll want to use no matter what is ValveMap.         ###
@@ -131,7 +184,7 @@ class ValveMap(Group):
 		self.world = World()
 		#self.hidden = 0					# TODO: Is this necessary?
 		self.cameras = Cameras()
-		#self.cordon = 0					# TODO: Is this necessary?
+		self.cordon = Cordon()				# TODO: Is this necessary?
 		
 		# Push these properties (references) into our children list
 		c = self.children
@@ -140,7 +193,7 @@ class ValveMap(Group):
 		c.append(self.world)
 		#c.append(self.hidden)
 		c.append(self.cameras)
-		#c.append(self.cordon)
+		c.append(self.cordon)
 	
 	def write_vmf(self, filename):
 		print 'Writing to: ' + filename
