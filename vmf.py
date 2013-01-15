@@ -142,7 +142,7 @@ class ValveMap(Group):
 		c.append(self.cameras)
 		#c.append(self.cordon)
 	
-	def writevmf(self, filename):
+	def write_vmf(self, filename):
 		print 'Writing to: ' + filename
 		f = open(filename, 'w')
 		f.write(self.tostring())

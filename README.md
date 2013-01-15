@@ -1,7 +1,7 @@
-libvmf: a Python library for creating Valve Map Format (VMF) files
-==================================================================
+vmflib: a Python module for creating Valve Map Format (VMF) files
+=================================================================
 
-libvmf is a set of modules to help developers create maps for 
+vmflib is a python module to help developers create maps for 
 VMF-compatible video games procedurally using Python. The VMF format
 is best known for its use in the Source Engine and its many games.
 
@@ -15,14 +15,25 @@ In the meantime, if there's something you wish to contribute,
 message me or send me a pull request. Contributions are welcome.
 
 
-Documentation
--------------
+Usage
+-----
 
-Coming soon.
+Current functionality is very limited (to say the least), but
+the general usage is as follows:
+
+```python
+from vmf import ValveMap
+
+m = ValveMap()
+
+# do stuff with m
+
+m.write_vmf("mymap.vmf")
+```
 
 
 License
 -------
 
-libvmf is provided freely under the Simplified BSD License.
+vmflib is provided freely under the Simplified BSD License.
 See LICENSE for full details.
