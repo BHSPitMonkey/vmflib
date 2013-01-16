@@ -49,6 +49,7 @@ class Group:
 
     def __init__(self):
         self.properties = {}
+        self.auto_properties = []
         self.children = []
 
     # Render this group as a string
@@ -65,6 +66,11 @@ class Group:
         if (self.classname != False):
             string += tab_prefix + self.classname + '\n'
             string += tab_prefix + '{\n'
+
+        # Print auto properties (properties bound to instance attributes)
+        for attr_name in self.auto_properties:
+            string += '%s"%s" "%s"\n' % (tab_prefix_inner,
+                attr_name, getattr(self, attr_name))
 
         # Print properties
         for item in self.properties.items():
@@ -121,10 +127,7 @@ class Cordon(Group):
         self.maxs = Vertex(-99999, -99999, -99999)
         self.active = Bool(0)
 
-        p = self.properties
-        p['mins'] = self.mins
-        p['maxs'] = self.maxs
-        p['active'] = self.active
+        self.auto_properties = ['mins', 'maxs', 'active']
 
 
 class Entity(Group):
