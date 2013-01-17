@@ -65,7 +65,7 @@ class Group:
         self.children = []
 
     # Render this group as a string
-    def tostring(self, tab_level=-1):
+    def __repr__(self, tab_level=-1):
         string = ''
 
         # Generate line prefixes (tab characters) for later
@@ -90,7 +90,7 @@ class Group:
 
         # Print child groups
         for child in self.children:
-            string += child.tostring(tab_level + 1)
+            string += child.__repr__(tab_level + 1)
 
         # Print close brace
         if (self.classname != False):
@@ -214,5 +214,5 @@ class ValveMap(Group):
     def write_vmf(self, filename):
         print 'Writing to: ' + filename
         f = open(filename, 'w')
-        f.write(self.tostring())
+        f.write(repr(self))
         f.close()
