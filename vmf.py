@@ -29,6 +29,18 @@ class Vertex:
         return '(%s %s %s)' % (self.x, self.y, self.z)
 
 
+class RGB:
+    """A color given by 3 integer values separated by spaces (0-255)"""
+
+    def __init__(self, r=0, g=0, b=0):
+        self.r = int(r)
+        self.g = int(g)
+        self.b = int(b)
+
+    def __repr__(self):
+        return '%d %d %d' % (self.r, self.g, self.b)
+
+
 class Bool:
     """A boolean value rendered as a 0 or 1"""
 
