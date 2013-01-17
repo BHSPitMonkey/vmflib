@@ -22,9 +22,9 @@ Current functionality is very limited (to say the least), but
 the general usage is as follows:
 
 ```python
-from vmf import ValveMap
+import vmf
 
-m = ValveMap()
+m = vmf.ValveMap()
 
 # do stuff with m
 
