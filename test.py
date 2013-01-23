@@ -1,6 +1,6 @@
 #!/usr/bin/python -i
 
-import vmf
+from vmf import *
 
 m = vmf.ValveMap()
 

@@ -11,44 +11,7 @@
 # https://developer.valvesoftware.com/wiki/VMF_documentation
 # https://developer.valvesoftware.com/wiki/VMF_documentation:_World_Class
 
-
-########################################################################
-### These classes define the data types used by property values in a ###
-### VMF map. They can be used later inside "properties" dicts.       ###
-########################################################################
-
-class Vertex:
-    """An XYZ location given by 3 decimal values separated by spaces"""
-
-    def __init__(self, x=0, y=0, z=0):
-        self.x = x
-        self.y = y
-        self.z = z
-
-    def __repr__(self):
-        return '(%s %s %s)' % (self.x, self.y, self.z)
-
-
-class RGB:
-    """A color given by 3 integer values separated by spaces (0-255)"""
-
-    def __init__(self, r=0, g=0, b=0):
-        self.r = int(r)
-        self.g = int(g)
-        self.b = int(b)
-
-    def __repr__(self):
-        return '%d %d %d' % (self.r, self.g, self.b)
-
-
-class Bool:
-    """A boolean value rendered as a 0 or 1"""
-
-    def __init__(self, state=False):
-        self.state = state
-
-    def __repr__(self):
-        return str(int(bool(self.state)))
+from types import *
 
 
 ###############################################################################
@@ -75,7 +38,7 @@ class Group:
         tab_prefix_inner = tab_prefix + '\t'
 
         # Generate class declaration and opening brace
-        if (self.classname != False):
+        if (self.classname):
             string += tab_prefix + self.classname + '\n'
             string += tab_prefix + '{\n'
 
@@ -93,7 +56,7 @@ class Group:
             string += child.__repr__(tab_level + 1)
 
         # Print close brace
-        if (self.classname != False):
+        if (self.classname):
             string += tab_prefix + '}\n'
 
         return string
