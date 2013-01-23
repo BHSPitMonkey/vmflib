@@ -18,7 +18,7 @@ class Solid(Group):
 
     """
 
-    classname = 'solid'
+    vmf_class_name = 'solid'
     solid_count = 0
 
     def __init__(self):
@@ -33,7 +33,7 @@ class Side(Group):
 
     """A class representing a single side of a brush."""
 
-    classname = 'side'
+    vmf_class_name = 'side'
     side_count = 0
 
     def __init__(self):

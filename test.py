@@ -19,3 +19,6 @@ s = [brush.Side(), brush.Side(), brush.Side(), brush.Side()]
 
 for side in s:
     b.children.append(side)
+
+# Add brush to map
+m.world.children.append(b)
