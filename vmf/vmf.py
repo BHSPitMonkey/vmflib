@@ -18,7 +18,7 @@ from types import *
 ### This is a base class for the VMF "Classes" we will define further down. ###
 ###############################################################################
 
-class Group:
+class VmfClass:
     """A class representing a key-value group in the VMF KeyValues structure"""
     vmf_class_name = 'UntitledClass'
 
@@ -27,7 +27,7 @@ class Group:
         self.auto_properties = []
         self.children = []
 
-    # Render this group as a string
+    # Render this class as a string
     def __repr__(self, tab_level=-1):
         string = ''
 
@@ -62,17 +62,17 @@ class Group:
         return string
 
 
-########################################################################
-### These classes define the various "Classes" (groups) found in a   ###
-### VMF map. They derive from the Group class.                       ###
-########################################################################
+###############################################################
+### These classes define the various "Classes" found in a   ###
+### VMF map. They derive from the VmfClass class.           ###
+###############################################################
 
-class VersionInfo(Group):
+class VersionInfo(VmfClass):
     """A class representing the versioninfo section of a Valve Map"""
     vmf_class_name = 'versioninfo'
 
     def __init__(self):
-        Group.__init__(self)
+        VmfClass.__init__(self)
 
         p = self.properties
         p['editorversion'] = 0
@@ -82,22 +82,22 @@ class VersionInfo(Group):
         p['prefab'] = 0
 
 
-class VisGroups(Group):
+class VisVmfClasss(VmfClass):
     """A class representing the versioninfo section of a Valve Map"""
     vmf_class_name = 'visgroups'
 
 
-class Cameras(Group):
+class Cameras(VmfClass):
     """A class representing the cameras section of a Valve Map"""
     vmf_class_name = 'cameras'
 
 
-class Cordon(Group):
+class Cordon(VmfClass):
     """A class representing the cordon section of a Valve Map"""
     vmf_class_name = 'cordon'
 
     def __init__(self):
-        Group.__init__(self)
+        VmfClass.__init__(self)
         self.mins = Vertex(99999, 99999, 99999)
         self.maxs = Vertex(-99999, -99999, -99999)
         self.active = Bool(0)
@@ -105,13 +105,13 @@ class Cordon(Group):
         self.auto_properties = ['mins', 'maxs', 'active']
 
 
-class Entity(Group):
+class Entity(VmfClass):
     """A class representing an entity class in a Valve Map"""
     vmf_class_name = 'entity'
     entitycount = 0
 
     def __init__(self, class_name, entity_type):
-        Group.__init__(self)
+        VmfClass.__init__(self)
         self.classname = class_name        # Required
         self.spawnflags = 0
 
@@ -148,12 +148,12 @@ class World(Entity):
 
 # Tip: After instantiating a World object, put a bunch
 # of Entities into its children list
-class ValveMap(Group):
+class ValveMap(VmfClass):
     """A class encapsulating the Valve Map Format (VMF)"""
     vmf_class_name = False                    # Document-level, has no class name
 
     def __init__(self):
-        Group.__init__(self)                # Superclass initializer
+        VmfClass.__init__(self)                # Superclass initializer
 
         # These properties are objects that represent the basic structure
         # of a Valve Map.  Some of these are meant to contain many

@@ -4,11 +4,11 @@ Classes for dealing with brushes.
 
 """
 
-from vmf import Group
+from vmf import VmfClass
 from types import *
 
 
-class Solid(Group):
+class Solid(VmfClass):
 
     """A class representing a single brush in a map.
 
@@ -22,14 +22,14 @@ class Solid(Group):
     solid_count = 0
 
     def __init__(self):
-        Group.__init__(self)
+        VmfClass.__init__(self)
         self.auto_properties = []
 
         self.properties['id'] = Solid.solid_count
         Solid.solid_count += 1
 
 
-class Side(Group):
+class Side(VmfClass):
 
     """A class representing a single side of a brush."""
 
@@ -37,7 +37,7 @@ class Side(Group):
     side_count = 0
 
     def __init__(self):
-        Group.__init__(self)
+        VmfClass.__init__(self)
         self.plane = Plane()
         self.material = 'BRICK/BRICKFLOOR001A'
         self.uaxis = '[1 0 0 0] 0.25'
@@ -52,3 +52,18 @@ class Side(Group):
         p = self.properties
         p['id'] = Solid.solid_count
         Solid.solid_count += 1
+
+
+class Group(VmfClass):
+
+    """A class representing a group of brushes."""
+    
+    vmf_class_name = 'group'
+    group_count = 0
+
+    def __init__(self):
+        VmfClass.__init__(self)
+        self.auto_properties = []
+
+        self.properties['id'] = Group.group_count
+        Group.group_count += 1
