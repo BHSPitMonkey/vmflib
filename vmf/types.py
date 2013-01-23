@@ -5,6 +5,7 @@ property values in a VMF map.
 
 """
 
+
 class Vertex:
 
     """An XYZ location given by 3 decimal values."""
@@ -43,3 +44,17 @@ class Bool:
 
     def __repr__(self):
         return str(int(bool(self.state)))
+
+
+class Plane:
+
+    """A set of three Vertices which define a plane."""
+
+    def __init__(self, v0=Vertex(), v1=Vertex(), v2=Vertex()):
+        """Create a new Vertex representing the position (x, y, z)."""
+        self.v0 = v0
+        self.v1 = v1
+        self.v2 = v2
+
+    def __repr__(self):
+        return '%s %s %s' % (self.v0, self.v1, self.v2)

@@ -1,1 +1,1 @@
-__all__ = ["vmf", "types"]
+__all__ = ["vmf", "types", "brush"]
