@@ -1,15 +1,8 @@
-# vmf.py
-# Project: vmflib
-# Author: Stephen Eisenhauer (mail@stepheneisenhauer.com)
-#
-# Represents a map using VMF (Valve Map Format).
-# Can be created/manipulated using Python interfaces, then exported
-# as a VMF file (plain text) to be compiled and loaded into a game.
-#
-# More info:
-# https://github.com/BHSPitMonkey/vmflib
-# https://developer.valvesoftware.com/wiki/VMF_documentation
-# https://developer.valvesoftware.com/wiki/VMF_documentation:_World_Class
+"""
+
+Main classes for working with VMF maps.
+
+"""
 
 from types import *
 
@@ -19,7 +12,9 @@ from types import *
 ###############################################################################
 
 class VmfClass:
-    """A class representing a key-value group in the VMF KeyValues structure"""
+
+    """A class representing a key-value group in the VMF KeyValues structure."""
+
     vmf_class_name = 'UntitledClass'
 
     def __init__(self):
@@ -68,7 +63,9 @@ class VmfClass:
 ###############################################################
 
 class VersionInfo(VmfClass):
-    """A class representing the versioninfo section of a Valve Map"""
+
+    """A class representing the versioninfo section of a Valve Map."""
+
     vmf_class_name = 'versioninfo'
 
     def __init__(self):
@@ -83,17 +80,23 @@ class VersionInfo(VmfClass):
 
 
 class VisVmfClasss(VmfClass):
-    """A class representing the versioninfo section of a Valve Map"""
+
+    """A class representing the versioninfo section of a Valve Map."""
+
     vmf_class_name = 'visgroups'
 
 
 class Cameras(VmfClass):
-    """A class representing the cameras section of a Valve Map"""
+
+    """A class representing the cameras section of a Valve Map."""
+
     vmf_class_name = 'cameras'
 
 
 class Cordon(VmfClass):
-    """A class representing the cordon section of a Valve Map"""
+
+    """A class representing the cordon section of a Valve Map."""
+
     vmf_class_name = 'cordon'
 
     def __init__(self):
@@ -106,7 +109,9 @@ class Cordon(VmfClass):
 
 
 class Entity(VmfClass):
-    """A class representing an entity class in a Valve Map"""
+
+    """A class representing an entity class in a Valve Map."""
+ 
     vmf_class_name = 'entity'
     entitycount = 0
 
@@ -125,7 +130,9 @@ class Entity(VmfClass):
 # Tip: After instantiating a World object, put a bunch
 # of Solids into its children list
 class World(Entity):
-    """A class representing the world section of a Valve Map"""
+
+    """A class representing the world section of a Valve Map."""
+
     vmf_class_name = "world"
     worldcount = 0
 
@@ -149,11 +156,13 @@ class World(Entity):
 # Tip: After instantiating a World object, put a bunch
 # of Entities into its children list
 class ValveMap(VmfClass):
-    """A class encapsulating the Valve Map Format (VMF)"""
-    vmf_class_name = False                    # Document-level, has no class name
+
+    """A class encapsulating the Valve Map Format (VMF)."""
+
+    vmf_class_name = False                 # Document-level, has no class name
 
     def __init__(self):
-        VmfClass.__init__(self)                # Superclass initializer
+        VmfClass.__init__(self)            # Superclass initializer
 
         # These properties are objects that represent the basic structure
         # of a Valve Map.  Some of these are meant to contain many
@@ -176,6 +185,7 @@ class ValveMap(VmfClass):
         c.append(self.cordon)
 
     def write_vmf(self, filename):
+        """Write the map to a file in VMF format."""
         print 'Writing to: ' + filename
         f = open(filename, 'w')
         f.write(repr(self))
