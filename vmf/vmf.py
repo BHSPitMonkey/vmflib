@@ -79,7 +79,7 @@ class VersionInfo(VmfClass):
         p['prefab'] = 0
 
 
-class VisVmfClasss(VmfClass):
+class VisGroups(VmfClass):
 
     """A class representing the versioninfo section of a Valve Map."""
 
@@ -127,11 +127,25 @@ class Entity(VmfClass):
         Entity.entitycount += 1            # Increment entity counter
 
 
-# Tip: After instantiating a World object, put a bunch
-# of Solids into its children list
+class Connections(VmfClass):
+
+    """Represents a connections class for use within an Entity object.
+    
+    Give this class properties with values of type Output (types.Output).
+    
+    """
+
+    vmf_class_name = "connections"
+
+
 class World(Entity):
 
-    """A class representing the world section of a Valve Map."""
+    """A class representing the world section of a Valve Map.
+
+    Be sure to create lots of brush (Solid) objects and add them to the World
+    object's children attribute. Nobody likes an empty world.
+
+    """
 
     vmf_class_name = "world"
     worldcount = 0

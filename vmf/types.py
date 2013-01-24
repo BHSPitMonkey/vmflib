@@ -58,3 +58,28 @@ class Plane:
 
     def __repr__(self):
         return '%s %s %s' % (self.v0, self.v1, self.v2)
+
+
+class Output:
+
+    """An output connection for an Entity. Used within 'connections' classes.
+
+    Example:
+
+    >>> conn = vmf.Connections()
+    >>> conn.properties["OnTrigger"] = types.Output("bob", "ToggleSprite", "",
+    ...     3.14, -1)
+    >>> my_entity.children.append(conn)
+
+    """
+
+    def __init__(self, target, input, parameter='', delay=0, times_to_fire=1):
+        self.target = target
+        self.input = input
+        self.parameter = parameter
+        self.delay = delay
+        self.times_to_fire = times_to_fire
+
+    def __repr__(self):
+        return '%s,%s,%s,%s,%s' % (self.target, self.input, self.parameter,
+            self.delay, self.times_to_fire)
