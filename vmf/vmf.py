@@ -154,7 +154,7 @@ class World(Entity):
         Entity.__init__(self, 'worldspawn', 'TODO')
         self.skyname = 'sky_day01_01'
 
-        self.auto_properties = ['skyname']
+        self.auto_properties += ['skyname']
 
         p = self.properties
         p['id'] = World.worldcount
