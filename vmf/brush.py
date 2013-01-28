@@ -36,10 +36,10 @@ class Side(VmfClass):
     vmf_class_name = 'side'
     side_count = 0
 
-    def __init__(self):
+    def __init__(self, plane=Plane(), material='BRICK/BRICKFLOOR001A'):
         VmfClass.__init__(self)
-        self.plane = Plane()
-        self.material = 'BRICK/BRICKFLOOR001A'
+        self.plane = plane
+        self.material = material
         self.uaxis = '[1 0 0 0] 0.25'
         self.vaxis = '[0 0 -1 0] 0.25'
         self.rotation = 0
