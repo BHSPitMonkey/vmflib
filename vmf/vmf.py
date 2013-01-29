@@ -200,7 +200,7 @@ class ValveMap(VmfClass):
 
     def write_vmf(self, filename):
         """Write the map to a file in VMF format."""
-        print 'Writing to: ' + filename
+        print('Writing to: ' + filename)
         f = open(filename, 'w')
         f.write(repr(self))
         f.close()
