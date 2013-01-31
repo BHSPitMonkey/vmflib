@@ -57,7 +57,7 @@ class Side(VmfClass):
 class Group(VmfClass):
 
     """A class representing a group of brushes."""
-    
+
     vmf_class_name = 'group'
     group_count = 0
 

@@ -13,7 +13,7 @@ from types import *
 
 class VmfClass:
 
-    """A class representing a key-value group in the VMF KeyValues structure."""
+    """A class representing a KeyValue group in the VMF KeyValues structure."""
 
     vmf_class_name = 'UntitledClass'
 
@@ -111,7 +111,7 @@ class Cordon(VmfClass):
 class Entity(VmfClass):
 
     """A class representing an entity class in a Valve Map."""
- 
+
     vmf_class_name = 'entity'
     entitycount = 0
 
@@ -130,9 +130,9 @@ class Entity(VmfClass):
 class Connections(VmfClass):
 
     """Represents a connections class for use within an Entity object.
-    
+
     Give this class properties with values of type Output (types.Output).
-    
+
     """
 
     vmf_class_name = "connections"
