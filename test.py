@@ -1,6 +1,7 @@
 #!/usr/bin/python -i
 
 from vmf import *
+import vmf.tools as tools
 
 m = vmf.ValveMap()
 

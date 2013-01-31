@@ -1,4 +1,17 @@
-#!/usr/bin/python -i
+#!/usr/bin/python
+"""Example map generator: Woodbox
+
+This script demonstrates vmflib by generating a map (consisting of a large
+empty room) and writing it to "woodbox.vmf".  You can open the resulting file
+using the Valve Hammer Editor and compile it for use in-game.
+
+This example is a bit convoluted, since we are manually defining every brush
+and each of its sides individually. Thankfully, there is now a higher-level
+abstraction (tools.Block) which can be used to more easily create 3D block
+shapes like the ones shown here. See the example named "woodbox_blocks" for
+a demonstration.
+
+"""
 
 from vmf import *
 
