@@ -115,9 +115,9 @@ class Entity(VmfClass):
     vmf_class_name = 'entity'
     entitycount = 0
 
-    def __init__(self, class_name, entity_type):
+    def __init__(self, class_name):
         VmfClass.__init__(self)
-        self.classname = class_name        # Required
+        self.classname = class_name
         self.spawnflags = 0
 
         self.auto_properties = ['classname', 'spawnflags']
