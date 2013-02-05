@@ -151,7 +151,7 @@ class World(Entity):
     worldcount = 0
 
     def __init__(self):
-        Entity.__init__(self, 'worldspawn', 'TODO')
+        Entity.__init__(self, 'worldspawn')
         self.skyname = 'sky_day01_01'
 
         self.auto_properties += ['skyname']
