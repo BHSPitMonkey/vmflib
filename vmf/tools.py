@@ -5,8 +5,7 @@ in the VMF format itself.
 
 """
 
-from types import *
-from brush import *
+from vmf import brush, types
 
 
 class Block():
@@ -22,7 +21,7 @@ class Block():
     """
 
     def __init__(self,
-        origin=Vertex(),
+        origin=types.Vertex(),
         dimensions=(64, 64, 64),
         material='BRICK/BRICKFLOOR001A'):
         """Create a new Block at origin with dimensions and material."""
@@ -30,12 +29,12 @@ class Block():
         self.dimensions = dimensions
 
         # Create brush
-        self.brush = Solid()
+        self.brush = brush.Solid()
 
         # Create sides
         sides = []
         for i in range(6):
-            sides.append(Side(Plane(), material))
+            sides.append(brush.Side(types.Plane(), material))
         self.brush.children.extend(sides)
 
         # Compute initial side planes
@@ -54,30 +53,30 @@ class Block():
         b = l / 2
         c = h / 2
 
-        self.brush.children[0].plane = Plane(
-            Vertex(x - a, y + b, z + c),
-            Vertex(x + a, y + b, z + c),
-            Vertex(x + a, y - b, z + c))
-        self.brush.children[1].plane = Plane(
-            Vertex(x - a, y - b, z - c),
-            Vertex(x + a, y - b, z - c),
-            Vertex(x + a, y + b, z - c))
-        self.brush.children[2].plane = Plane(
-            Vertex(x - a, y + b, z + c),
-            Vertex(x - a, y - b, z + c),
-            Vertex(x - a, y - b, z - c))
-        self.brush.children[3].plane = Plane(
-            Vertex(x + a, y + b, z - c),
-            Vertex(x + a, y - b, z - c),
-            Vertex(x + a, y - b, z + c))
-        self.brush.children[4].plane = Plane(
-            Vertex(x + a, y + b, z + c),
-            Vertex(x - a, y + b, z + c),
-            Vertex(x - a, y + b, z - c))
-        self.brush.children[5].plane = Plane(
-            Vertex(x + a, y - b, z - c),
-            Vertex(x - a, y - b, z - c),
-            Vertex(x - a, y - b, z + c))
+        self.brush.children[0].plane = types.Plane(
+            types.Vertex(x - a, y + b, z + c),
+            types.Vertex(x + a, y + b, z + c),
+            types.Vertex(x + a, y - b, z + c))
+        self.brush.children[1].plane = types.Plane(
+            types.Vertex(x - a, y - b, z - c),
+            types.Vertex(x + a, y - b, z - c),
+            types.Vertex(x + a, y + b, z - c))
+        self.brush.children[2].plane = types.Plane(
+            types.Vertex(x - a, y + b, z + c),
+            types.Vertex(x - a, y - b, z + c),
+            types.Vertex(x - a, y - b, z - c))
+        self.brush.children[3].plane = types.Plane(
+            types.Vertex(x + a, y + b, z - c),
+            types.Vertex(x + a, y - b, z - c),
+            types.Vertex(x + a, y - b, z + c))
+        self.brush.children[4].plane = types.Plane(
+            types.Vertex(x + a, y + b, z + c),
+            types.Vertex(x - a, y + b, z + c),
+            types.Vertex(x - a, y + b, z - c))
+        self.brush.children[5].plane = types.Plane(
+            types.Vertex(x + a, y - b, z - c),
+            types.Vertex(x - a, y - b, z - c),
+            types.Vertex(x - a, y - b, z + c))
 
     def set_material(self, material):
         for side in self.brush.children:

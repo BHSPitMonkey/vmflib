@@ -4,7 +4,7 @@ Main classes for working with VMF maps.
 
 """
 
-from types import *
+from vmf import types
 
 
 ###############################################################################
@@ -101,9 +101,9 @@ class Cordon(VmfClass):
 
     def __init__(self):
         VmfClass.__init__(self)
-        self.mins = Vertex(99999, 99999, 99999)
-        self.maxs = Vertex(-99999, -99999, -99999)
-        self.active = Bool(0)
+        self.mins = types.Vertex(99999, 99999, 99999)
+        self.maxs = types.Vertex(-99999, -99999, -99999)
+        self.active = types.Bool(0)
 
         self.auto_properties = ['mins', 'maxs', 'active']
 

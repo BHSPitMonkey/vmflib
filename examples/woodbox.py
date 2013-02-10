@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Example map generator: Woodbox
 
 This script demonstrates vmflib by generating a map (consisting of a large
