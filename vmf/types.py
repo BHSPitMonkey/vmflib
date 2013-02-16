@@ -20,6 +20,22 @@ class Vertex:
         return '(%s %s %s)' % (self.x, self.y, self.z)
 
 
+class Axis:
+
+    """A u-axis or v-axis value used in a Side object in a brush."""
+
+    def __init__(self, x=0, y=0, z=0, translate=0, scale=0.25):
+        """Create a new Axis value."""
+        self.x = x
+        self.y = y
+        self.z = z
+        self.translate = translate
+        self.scale = scale
+
+    def __repr__(self):
+        return '[%s %s %s %s] %s' % (
+        self.x, self.y, self.z, self.translate, self.scale)
+
 class RGB:
 
     """A color given by 3 integer values separated by spaces (0-255)."""
@@ -59,6 +75,36 @@ class Plane:
     def __repr__(self):
         return '%s %s %s' % (self.v0, self.v1, self.v2)
 
+    def sensible_axes(self):
+        """Returns a sensible uaxis and vaxis for this plane."""
+        print("Plane: ", self.v0, self.v1, self.v2)
+        axes = [1, 1, 1]
+        if self.v0.x == self.v1.x == self.v2.x:
+            axes[0] = 0
+        if self.v0.y == self.v1.y == self.v2.y:
+            axes[1] = 0
+        if self.v0.z == self.v1.z == self.v2.z:
+            axes[2] = 0
+
+        print("Axes is: ", axes)
+	# axes is [1, 1, 0]
+
+        u = [0, 0, 0]
+        for i in range(3):
+            if axes[i] == 1:
+                u[i] = 1
+                axes[i] = 0
+                break
+
+        v = [0, 0, 0]
+        for i in range(3):
+            if axes[i] == 1:
+                v[i] = -1
+                break
+
+        uaxis = Axis(u[0], u[1], u[2])
+        vaxis = Axis(v[0], v[1], v[2])
+        return (uaxis, vaxis)
 
 class Output:
 

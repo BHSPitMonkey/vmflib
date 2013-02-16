@@ -31,7 +31,7 @@ class Block():
         # Create brush
         self.brush = brush.Solid()
 
-        # Create sides
+        # Create (un-positioned) sides
         sides = []
         for i in range(6):
             sides.append(brush.Side(types.Plane(), material))
@@ -77,6 +77,9 @@ class Block():
             types.Vertex(x + a, y - b, z - c),
             types.Vertex(x - a, y - b, z - c),
             types.Vertex(x - a, y - b, z + c))
+
+        for side in self.brush.children:
+            side.uaxis, side.vaxis = side.plane.sensible_axes()
 
     def set_material(self, material):
         for side in self.brush.children:

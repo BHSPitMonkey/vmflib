@@ -39,11 +39,11 @@ class Side(vmf.VmfClass):
         vmf.VmfClass.__init__(self)
         self.plane = plane
         self.material = material
-        self.uaxis = '[1 0 0 0] 0.25'
-        self.vaxis = '[0 0 -1 0] 0.25'
         self.rotation = 0
         self.lightmapscale = 16
         self.smoothing_groups = 0
+        self.uaxis = types.Axis()
+        self.vaxis = types.Axis()
 
         self.auto_properties = ['plane', 'material', 'uaxis', 'vaxis',
             'rotation', 'lightmapscale', 'smoothing_groups']
