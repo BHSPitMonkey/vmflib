@@ -77,7 +77,8 @@ class Plane:
 
     def sensible_axes(self):
         """Returns a sensible uaxis and vaxis for this plane."""
-        print("Plane: ", self.v0, self.v1, self.v2)
+        # TODO: Rewrite this method to allow non-90deg planes to work
+        # Figure out which axes the plane exists in
         axes = [1, 1, 1]
         if self.v0.x == self.v1.x == self.v2.x:
             axes[0] = 0
@@ -86,9 +87,7 @@ class Plane:
         if self.v0.z == self.v1.z == self.v2.z:
             axes[2] = 0
 
-        print("Axes is: ", axes)
-	# axes is [1, 1, 0]
-
+        # Figure out uaxis xyz
         u = [0, 0, 0]
         for i in range(3):
             if axes[i] == 1:
@@ -96,6 +95,7 @@ class Plane:
                 axes[i] = 0
                 break
 
+        # Figure out vaxis xyz
         v = [0, 0, 0]
         for i in range(3):
             if axes[i] == 1:
