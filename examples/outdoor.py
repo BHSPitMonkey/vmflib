@@ -8,6 +8,7 @@ some terrain (a displacement map).
 from vmf import *
 from vmf.types import Vertex
 from vmf.tools import Block
+from vmf.brush import DispInfo
 
 m = vmf.ValveMap()
 
@@ -22,13 +23,32 @@ light.properties['_light'] = "254 242 160 400"
 light.properties['pitch'] = -25
 m.world.children.append(light)
 
+# Displacement map for the floor
+# do cool stuff
+norms = []
+for i in range(17):
+    row = []
+    for j in range(17):
+        row.append(Vertex(0, 0, 0))
+    norms.append(row)
+dists = []
+for i in range(17):
+    row = []
+    for j in range(17):
+        row.append((i % 2) + ((j+1) % 2)) # funky pattern
+    dists.append(row)
+d = DispInfo(4, norms, dists)
+
+
 # Floor
 floor = Block(Vertex(0, 0, -512), (1024, 1024, 64), 'nature/dirtground004')
+floor.top().children.append(d)  # Add disp map to the ground
 
 # Ceiling
 ceiling = Block(Vertex(0, 0, 512), (1024, 1024, 64))
 ceiling.set_material('tools/toolsskybox2d')
 
+# Prepare some upper walls for the skybox
 skywalls = []
 # Left upper wall
 skywalls.append(Block(Vertex(-512, 0, 256), (64, 1024, 512)))
@@ -41,6 +61,7 @@ skywalls.append(Block(Vertex(0, -512, 256), (1024, 64, 512)))
 for wall in skywalls:
     wall.set_material('tools/toolsskybox2d')
 
+# Prepare some lower walls to be basic walls
 walls = []
 # Left wall
 walls.append(Block(Vertex(-512, 0, -256), (64, 1024, 512)))
@@ -54,7 +75,7 @@ walls.append(Block(Vertex(0, -512, -256), (1024, 64, 512)))
 for wall in walls:
     wall.set_material('brick/brickwall001')
 
-# Add walls to world geometry
+# Add everything we prepared to the world geometry
 m.world.children.extend(walls)
 m.world.children.extend(skywalls)
 m.world.children.extend([floor, ceiling])

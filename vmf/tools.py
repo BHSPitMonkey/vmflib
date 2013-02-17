@@ -85,5 +85,13 @@ class Block():
         for side in self.brush.children:
             side.material = material
 
+    def bottom(self):
+        """Returns the bottom Side of the Block."""
+        return self.brush.children[1]
+    
+    def top(self):
+        """Returns the top Side of the Block."""
+        return self.brush.children[0]
+
     def __repr__(self, tab_level=-1):
         return self.brush.__repr__(tab_level)
