@@ -29,13 +29,13 @@ norms = []
 for i in range(17):
     row = []
     for j in range(17):
-        row.append(Vertex(0, 0, 0))
+        row.append(Vertex(0, 0, 1))
     norms.append(row)
 dists = []
 for i in range(17):
     row = []
     for j in range(17):
-        row.append((i % 2) + ((j+1) % 2)) # funky pattern
+        row.append(((i % 2) + ((j+1) % 2)) * 4) # funky pattern
     dists.append(row)
 d = DispInfo(4, norms, dists)
 
