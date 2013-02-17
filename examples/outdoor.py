@@ -11,8 +11,19 @@ from vmf.tools import Block
 
 m = vmf.ValveMap()
 
+# Environment and lighting
+m.world.skyname = 'sky_day02_01'
+# Sun angle	S Pitch	Brightness		Ambience
+# 0 225 0	 -25	 254 242 160 400	172 196 204 80
+light = vmf.Entity('light_environment')
+light.properties['origin'] = "0 0 0"
+light.properties['_ambient'] = "172 196 204 80"
+light.properties['_light'] = "254 242 160 400"
+light.properties['pitch'] = -25
+m.world.children.append(light)
+
 # Floor
-floor = Block(Vertex(0, 0, -512), (1024, 1024, 64), 'nature/dirtfloor012a')
+floor = Block(Vertex(0, 0, -512), (1024, 1024, 64), 'nature/dirtground004')
 
 # Ceiling
 ceiling = Block(Vertex(0, 0, 512), (1024, 1024, 64))
@@ -41,7 +52,7 @@ walls.append(Block(Vertex(0, 512, -256), (1024, 64, 512)))
 walls.append(Block(Vertex(0, -512, -256), (1024, 64, 512)))
 # Set each wall's material
 for wall in walls:
-    wall.set_material('PL_BARNBLITZ/WOODWALL_YELLOWWORN002')
+    wall.set_material('brick/brickwall001')
 
 # Add walls to world geometry
 m.world.children.extend(walls)
