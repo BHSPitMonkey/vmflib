@@ -35,42 +35,43 @@ dists = []
 for i in range(17):
     row = []
     for j in range(17):
-        row.append(((i % 2) + ((j+1) % 2)) * 4) # funky pattern
+        row.append(((i % 2) + ((j+1) % 2)) * 6) # funky pattern
     dists.append(row)
 d = DispInfo(4, norms, dists)
 
 
 # Floor
-floor = Block(Vertex(0, 0, -512), (1024, 1024, 64), 'nature/dirtground004')
+floor = Block(Vertex(0, 0, -480), (2048, 2048, 64), 'nature/dirtground004')
+floor.top().lightmapscale = 32
 floor.top().children.append(d)  # Add disp map to the ground
 
 # Ceiling
-ceiling = Block(Vertex(0, 0, 512), (1024, 1024, 64))
+ceiling = Block(Vertex(0, 0, 512), (2048+128, 2048+128, 64))
 ceiling.set_material('tools/toolsskybox2d')
 
 # Prepare some upper walls for the skybox
 skywalls = []
 # Left upper wall
-skywalls.append(Block(Vertex(-512, 0, 256), (64, 1024, 512)))
+skywalls.append(Block(Vertex(-1024-64, 0, 128), (64, 2048+128, 768)))
 # Right upper wall
-skywalls.append(Block(Vertex(512, 0, 256), (64, 1024, 512)))
+skywalls.append(Block(Vertex(1024+64, 0, 128), (64, 2048+128, 768)))
 # Forward upper wall
-skywalls.append(Block(Vertex(0, 512, 256), (1024, 64, 512)))
+skywalls.append(Block(Vertex(0, 1024+64, 128), (2048+128, 64, 768)))
 # Rear upper wall
-skywalls.append(Block(Vertex(0, -512, 256), (1024, 64, 512)))
+skywalls.append(Block(Vertex(0, -1024-64, 128), (2048+128, 64, 768)))
 for wall in skywalls:
     wall.set_material('tools/toolsskybox2d')
 
 # Prepare some lower walls to be basic walls
 walls = []
 # Left wall
-walls.append(Block(Vertex(-512, 0, -256), (64, 1024, 512)))
+walls.append(Block(Vertex(-1024, 0, -384), (64, 2048+64, 256)))
 # Right wall
-walls.append(Block(Vertex(512, 0, -256), (64, 1024, 512)))
+walls.append(Block(Vertex(1024, 0, -384), (64, 2048+64, 256)))
 # Forward wall
-walls.append(Block(Vertex(0, 512, -256), (1024, 64, 512)))
+walls.append(Block(Vertex(0, 1024, -384), (2048+64, 64, 256)))
 # Rear wall
-walls.append(Block(Vertex(0, -512, -256), (1024, 64, 512)))
+walls.append(Block(Vertex(0, -1024, -384), (2048+64, 64, 256)))
 # Set each wall's material
 for wall in walls:
     wall.set_material('brick/brickwall001')
