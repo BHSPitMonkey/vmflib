@@ -32,7 +32,7 @@ games = {
     }
 
 def _make_arg_parser():
-    parser = argparse.ArgumentParser(description='Build a VMF map.')
+    parser = argparse.ArgumentParser(description='Build, install, and test a VMF map.')
     parser.add_argument('map')
     parser.add_argument('-g', '--game', default='tf2', choices=games.keys(),
         help="selects which game to use")
@@ -40,6 +40,12 @@ def _make_arg_parser():
         help="don't run the game after building/installing")
     parser.add_argument('--no-install', action="store_true",
         help="don't install (or run) the map after building")
+    parser.add_argument('-f', '--fast', action="store_true",
+        help="enable fast compile options")
+    parser.add_argument('--hdr', action="store_true",
+        help="enable full HDR compile")
+    parser.add_argument('--final', action="store_true",
+        help="use with --hdr for slow high-quality HDR compile")
 #    parser.add_argument('--steamapps',
 #        help="location of your user's steamapps subfolder")
 
@@ -77,12 +83,22 @@ if __name__ == '__main__':
         subprocess.call(vbsp_cmd)
         
         vvis_exe = os.path.join(sdkbin, "vvis.exe")
-        vvis_cmd = '"%s" -game "%s" "%s"' % (vvis_exe, gamedir, mappath)
+        opts = ''
+        if args.fast:
+            opts += '-fast '
+        vvis_cmd = '"%s" %s-game "%s" "%s"' % (vvis_exe, opts, gamedir, mappath)
         print(vvis_cmd)
         subprocess.call(vvis_cmd)
         
         vrad_exe = os.path.join(sdkbin, "vrad.exe")
-        vrad_cmd = '"%s" -game "%s" "%s"' % (vrad_exe, gamedir, mappath)
+        opts = ''
+        if args.fast:
+            opts += '-bounce 2 -noextra '
+        if args.hdr:
+            opts += '-both '
+        if args.hdr and args.final:
+            opts += '-final '
+        vrad_cmd = '"%s" %s-game "%s" "%s"' % (vrad_exe, opts, gamedir, mappath)
         print(vrad_cmd)
         subprocess.call(vrad_cmd)
 
