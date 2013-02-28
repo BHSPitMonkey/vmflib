@@ -40,8 +40,8 @@ def _make_arg_parser():
         help="don't run the game after building/installing")
     parser.add_argument('--no-install', action="store_true",
         help="don't install (or run) the map after building")
-    parser.add_argument('--steamapps',
-        help="location of your user's steamapps subfolder")
+#    parser.add_argument('--steamapps',
+#        help="location of your user's steamapps subfolder")
 
     return parser
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     mappath = os.path.join(path, mapname)
     bsp_file = os.path.join(path, mapname + ".bsp")
     
-    if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
+    if sys.platform.startswith('win32'):
         # Define constants
         games['tf2']['gamedir'] = os.path.join("team fortress 2", "tf")
 
@@ -71,11 +71,20 @@ if __name__ == '__main__':
         os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
 
         # Run the SDK tools
-        # - Use subprocess to call the tools
         vbsp_exe = os.path.join(sdkbin, "vbsp.exe")
         vbsp_cmd = '"%s" -game "%s" "%s"' % (vbsp_exe, gamedir, mappath)
         print(vbsp_cmd)
         subprocess.call(vbsp_cmd)
+        
+        vvis_exe = os.path.join(sdkbin, "vvis.exe")
+        vvis_cmd = '"%s" -game "%s" "%s"' % (vvis_exe, gamedir, mappath)
+        print(vvis_cmd)
+        subprocess.call(vvis_cmd)
+        
+        vrad_exe = os.path.join(sdkbin, "vrad.exe")
+        vrad_cmd = '"%s" -game "%s" "%s"' % (vrad_exe, gamedir, mappath)
+        print(vrad_cmd)
+        subprocess.call(vrad_cmd)
 
         # Install the map to the game's map directory (unless --no-install)
         if not args.no_install:
