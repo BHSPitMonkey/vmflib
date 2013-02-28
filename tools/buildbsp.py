@@ -21,6 +21,8 @@ import sys
 import os
 import subprocess
 import webbrowser
+import urllib.parse
+import shutil
 
 games = {
     'tf2': {'id': 440},
@@ -47,32 +49,46 @@ if __name__ == '__main__':
     parser = _make_arg_parser()
     args = parser.parse_args()
     vmf_file = os.path.abspath(args.map)
+    path, filename = os.path.split(vmf_file)
+    mapname = filename[:-4]
+    mappath = os.path.join(path, mapname)
+    bsp_file = os.path.join(path, mapname + ".bsp")
     
     if sys.platform.startswith('win32'):
         # Define constants
-        games['tf2']['gamedir'] = 'team fortress 2\tf'
+        games['tf2']['gamedir'] = os.path.join("team fortress 2", "tf")
 
         # Environmental scan
         # - Figure out paths we'll need (maybe detect where steam lives?)
         # Best I can figure out for now is accepting a path as an argument
-        steamapps = os.path.abspath(args.steamapps)
-        sdkbin = "%s\sourcesdk\bin\orangebox\bin" % steamapps
+        sourcesdk = os.environ['sourcesdk']
+        steamapps = os.path.join(sourcesdk, '..')
+        sdkbin = os.path.join(sourcesdk, "bin", "orangebox", "bin")
         game = games[args.game]
-        gamedir = "%s\%s" % (steamapps, game['gamedir'])
-        # TODO
-        
+        gamedir = os.path.join(steamapps, game['gamedir'])
+
+        # Change working directory first because VBSP is dumb
+        os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
+
         # Run the SDK tools
         # - Use subprocess to call the tools
-        # TODO
-        vbsp_cmd = '"%s\vbsp.exe" -game "%s" "%s"' % (sdkbin, gamedir, vmf_file)
-        print(vbsp_cmd)
-        
+        vbsp_exe = os.path.join(sdkbin, "vbsp.exe")
+        vbsp_args = '-game "%s" "%s"' % (gamedir, mappath)
+        print('%s %s' % (vbsp_exe, vbsp_args))
+        subprocess.call([vbsp_exe, vbsp_args])
+
         # Install the map to the game's map directory (unless --no-install)
-        # TODO
-        
+        if not args.no_install:
+            shutil.copy(bsp_file, os.path.join(gamedir, "maps"))
+        else:
+            print("Not installing map")
+
         # Launch the game (unless --no-run or --no-install)
         if not args.no_run and not args.no_install:
-            webbrowser.open("steam://run/%d//-dev -console -allowdebug +map %s" % (game['id'], "outdoor"))
+            params = urllib.parse.quote("-dev -console -allowdebug +map %s" % "outdoor")
+            run_url = "steam://run/%d//%s" % (game['id'], params)
+            print(run_url)
+            webbrowser.open(run_url)
         else:
             print("Not launching game")
 
