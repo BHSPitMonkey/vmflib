@@ -54,7 +54,7 @@ if __name__ == '__main__':
     mappath = os.path.join(path, mapname)
     bsp_file = os.path.join(path, mapname + ".bsp")
     
-    if sys.platform.startswith('win32'):
+    if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
         # Define constants
         games['tf2']['gamedir'] = os.path.join("team fortress 2", "tf")
 
@@ -73,9 +73,9 @@ if __name__ == '__main__':
         # Run the SDK tools
         # - Use subprocess to call the tools
         vbsp_exe = os.path.join(sdkbin, "vbsp.exe")
-        vbsp_args = '-game "%s" "%s"' % (gamedir, mappath)
-        print('%s %s' % (vbsp_exe, vbsp_args))
-        subprocess.call([vbsp_exe, vbsp_args])
+        vbsp_cmd = '"%s" -game "%s" "%s"' % (vbsp_exe, gamedir, mappath)
+        print(vbsp_cmd)
+        subprocess.call(vbsp_cmd)
 
         # Install the map to the game's map directory (unless --no-install)
         if not args.no_install:
