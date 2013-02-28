@@ -28,6 +28,7 @@ games = {
     'tf2': {'id': 440},
     'css': {'id': 240},
     'hl2': {'id': 220},
+    'hl2mp': {'id': 320},
     'gm': {'id': 4000}
     }
 
@@ -63,6 +64,10 @@ if __name__ == '__main__':
     if sys.platform.startswith('win32'):
         # Define constants
         games['tf2']['gamedir'] = os.path.join("team fortress 2", "tf")
+        games['css']['gamedir'] = os.path.join("counter-strike source", "cstrike")
+        games['hl2']['gamedir'] = os.path.join("half-life 2", "hl2")
+        games['hl2mp']['gamedir'] = os.path.join("half-life 2 deathmatch", "hl2mp")
+        games['gm']['gamedir'] = os.path.join("garrysmod", "garrysmod")
 
         # Environmental scan
         # - Figure out paths we'll need (maybe detect where steam lives?)
