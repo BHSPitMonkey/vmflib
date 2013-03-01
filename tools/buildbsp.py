@@ -31,6 +31,9 @@ games = {
     'hl2mp': {'id': 320},
     'gm': {'id': 4000}
     }
+win32 = sys.platform.startswith('win32')
+cygwin = sys.platform.startswith('cygwin')
+linux = sys.platform.startswith('linux')
 
 def _make_arg_parser():
     parser = argparse.ArgumentParser(description='Build, install, and test a VMF map.')
@@ -47,8 +50,8 @@ def _make_arg_parser():
         help="enable full HDR compile")
     parser.add_argument('--final', action="store_true",
         help="use with --hdr for slow high-quality HDR compile")
-#    parser.add_argument('--steamapps',
-#        help="location of your user's steamapps subfolder")
+    parser.add_argument('--sourcesdk',
+        help="location of your sourcesdk folder (for linux/wine)")
 
     return parser
 
@@ -61,7 +64,7 @@ if __name__ == '__main__':
     mappath = os.path.join(path, mapname)
     bsp_file = os.path.join(path, mapname + ".bsp")
     
-    if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
+    if win32 or cygwin:
         # Define constants
         games['tf2']['gamedir'] = os.path.join("team fortress 2", "tf")
         games['css']['gamedir'] = os.path.join("counter-strike source", "cstrike")
@@ -73,7 +76,7 @@ if __name__ == '__main__':
         # - Figure out paths we'll need (maybe detect where steam lives?)
         # Best I can figure out for now is accepting a path as an argument
         sourcesdk = os.environ['sourcesdk']
-        if sys.platform.startswith('cygwin'):
+        if cygwin:
             def cygwin2dos(path):
                 return subprocess.check_output(["cygpath", '-w', '%s' % path], universal_newlines=True).strip()
             sourcesdk = subprocess.check_output(["cygpath", sourcesdk], universal_newlines=True).strip()
@@ -85,7 +88,7 @@ if __name__ == '__main__':
         print(gamedir)
         print(mappath)
         mapsdir = os.path.join(gamedir, "maps")
-        if sys.platform.startswith('cygwin'):
+        if cygwin:
             gamedir = cygwin2dos(gamedir)
             print(gamedir)
             mappath = cygwin2dos(mappath)
@@ -128,11 +131,36 @@ if __name__ == '__main__':
 
         # Launch the game (unless --no-run or --no-install)
         if not args.no_run and not args.no_install:
-            params = urllib.parse.quote("-dev -console -allowdebug +map %s" % "outdoor")
+            params = urllib.parse.quote("-dev -console -allowdebug +map %s" % mapname)
             run_url = "steam://run/%d//%s" % (game['id'], params)
             print(run_url)
             webbrowser.open(run_url)
         else:
             print("Not launching game")
+    elif linux:
+        # Define constants
+        games['tf2']['gamedir'] = os.path.join("Team Fortress 2", "tf")
+        
+        # Environmental scan
+        sourcesdk = os.path.abspath(args.sourcesdk)
+        steamapps = os.path.join(sourcesdk, '..')
+        junk, username = os.path.split(os.path.abspath(steamapps))
+        sdkbin = os.path.join(sourcesdk, "bin", "orangebox", "bin")
+        game = games[args.game]
+        gamedir = os.path.join(steamapps, game['gamedir'])
+        
+        # Use native maps directory instead of wine's
+        mapsdir = os.path.join('~', '.steam', 'steam', 'SteamApps', username, game['gamedir'], "maps")
+        
+        # Change working directory first because VBSP is dumb
+        os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
+        
+        # Environment to use with wine calls
+        env = os.environ.copy()
+        env['WINEPREFIX'] = "~/.winesteam"
+        
+        # Run the SDK tools
+        #TODO
+        
     else:
         raise OSError('Your OS is not supported yet!')
