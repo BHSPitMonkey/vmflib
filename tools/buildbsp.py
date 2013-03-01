@@ -61,7 +61,7 @@ if __name__ == '__main__':
     mappath = os.path.join(path, mapname)
     bsp_file = os.path.join(path, mapname + ".bsp")
     
-    if sys.platform.startswith('win32'):
+    if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
         # Define constants
         games['tf2']['gamedir'] = os.path.join("team fortress 2", "tf")
         games['css']['gamedir'] = os.path.join("counter-strike source", "cstrike")
@@ -73,10 +73,23 @@ if __name__ == '__main__':
         # - Figure out paths we'll need (maybe detect where steam lives?)
         # Best I can figure out for now is accepting a path as an argument
         sourcesdk = os.environ['sourcesdk']
+        if sys.platform.startswith('cygwin'):
+            def cygwin2dos(path):
+                return subprocess.check_output(["cygpath", '-w', '%s' % path], universal_newlines=True).strip()
+            sourcesdk = subprocess.check_output(["cygpath", sourcesdk], universal_newlines=True).strip()
+        print(sourcesdk)
         steamapps = os.path.join(sourcesdk, '..')
         sdkbin = os.path.join(sourcesdk, "bin", "orangebox", "bin")
         game = games[args.game]
         gamedir = os.path.join(steamapps, game['gamedir'])
+        print(gamedir)
+        print(mappath)
+        mapsdir = os.path.join(gamedir, "maps")
+        if sys.platform.startswith('cygwin'):
+            gamedir = cygwin2dos(gamedir)
+            print(gamedir)
+            mappath = cygwin2dos(mappath)
+            print(mappath)
 
         # Change working directory first because VBSP is dumb
         os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
@@ -109,7 +122,7 @@ if __name__ == '__main__':
 
         # Install the map to the game's map directory (unless --no-install)
         if not args.no_install:
-            shutil.copy(bsp_file, os.path.join(gamedir, "maps"))
+            shutil.copy(bsp_file, mapsdir)
         else:
             print("Not installing map")
 
@@ -121,7 +134,5 @@ if __name__ == '__main__':
             webbrowser.open(run_url)
         else:
             print("Not launching game")
-
-        print("I don't work yet!")        
     else:
         raise OSError('Your OS is not supported yet!')
