@@ -161,6 +161,21 @@ if __name__ == '__main__':
         
         # Run the SDK tools
         #TODO
+        return
         
+        # Install the map to the game's map directory (unless --no-install)
+        if not args.no_install:
+            shutil.copy(bsp_file, mapsdir)
+        else:
+            print("Not installing map")
+
+        # Launch the game (unless --no-run or --no-install)
+        if not args.no_run and not args.no_install:
+            params = urllib.parse.quote("-dev -console -allowdebug +map %s" % mapname)
+            run_url = "steam://run/%d//%s" % (game['id'], params)
+            print(run_url)
+            webbrowser.open(run_url)
+        else:
+            print("Not launching game")
     else:
         raise OSError('Your OS is not supported yet!')
