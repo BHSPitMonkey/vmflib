@@ -41,7 +41,7 @@ d = DispInfo(4, norms, dists)
 
 
 # Floor
-floor = Block(Vertex(0, 0, -480), (2048, 2048, 64), 'nature/dirtground004')
+floor = Block(Vertex(0, 0, -480), (2048, 2048, 64), 'nature/dirtfloor003a')
 floor.top().lightmapscale = 32
 floor.top().children.append(d)  # Add disp map to the ground
 
@@ -74,7 +74,7 @@ walls.append(Block(Vertex(0, 1024, -384), (2048+64, 64, 256)))
 walls.append(Block(Vertex(0, -1024, -384), (2048+64, 64, 256)))
 # Set each wall's material
 for wall in walls:
-    wall.set_material('brick/brickwall001')
+    wall.set_material('brick/brickwall003a')
 
 # Add everything we prepared to the world geometry
 m.world.children.extend(walls)

@@ -37,7 +37,7 @@ walls.append(Block(Vertex(0, -512, 0), (1024, 64, 1024)))
 
 # Set each wall's material
 for wall in walls:
-    wall.set_material('PL_BARNBLITZ/WOODWALL_YELLOWWORN002')
+    wall.set_material('wood/woodwall009a')
 
 # Add walls to world geometry
 m.world.children.extend(walls)
