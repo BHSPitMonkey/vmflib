@@ -82,6 +82,42 @@ do:
   up to the tool (e.g. Hammer, or this library) to manage them internally.
 
 
+Try an example
+--------------
+
+Here's a simple way to see what vmflib can do, by running one of the included
+examples and compiling/running the map using the included build tool.
+
+This example will install the map into (and launch) Team Fortress 2.  If you
+would like to use a different Source Engine game, just replace "tf2" in the
+instructions below with "hl2" (for Half-Life 2), "css" (for Counter-Strike: 
+Source), "hl2mp" (for Half-Life 2: Deathmatch), or "gm" (for Garry's Mod).
+
+You'll need:
+
+* a Windows environment (either using a basic Command Prompt or cygwin)
+* a local copy of this repository
+* Steam running and signed in
+* Python 3
+
+If you're using a basic Windows command prompt (cmd.exe):
+
+1.  `cd` into the `vmflib` directory where you cloned this repository.
+2.  `set PYTHONPATH=.`
+3.  `python examples\outdoor.py`
+4.  `python tools\buildbsp.py --game tf2 outdoor.vmf`
+5.  If there are no errors, the map will be installed and the game will launch.
+
+If you're in a cygwin shell:
+
+1.  `cd` into the `vmflib` directory where you cloned this repository.
+2.  `export PYTHONPATH=.`
+3.  `examples/outdoor.py`
+4.  `tools/buildbsp.py --game tf2 outdoor.vmf`
+5.  If there are no errors, the map will be installed into the game you selected.
+    You will see a message explaining how to launch the game with the map you
+    just built.
+
 License
 -------
 
