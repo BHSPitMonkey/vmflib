@@ -95,10 +95,11 @@ Source), "hl2mp" (for Half-Life 2: Deathmatch), or "gm" (for Garry's Mod).
 
 You'll need:
 
-* a Windows environment (either using a basic Command Prompt or cygwin)
+* a Windows environment (either using a basic Command Prompt or cygwin) or Linux
 * a local copy of this repository
 * Steam running and signed in
 * Python 3
+* wine (if you're using Linux)
 
 If you're using a basic Windows command prompt (cmd.exe):
 
@@ -117,6 +118,17 @@ If you're in a cygwin shell:
 5.  If there are no errors, the map will be installed into the game you selected.
     You will see a message explaining how to launch the game with the map you
     just built.
+
+If you're using Linux:
+
+1.  `cd` into the `vmflib` directory where you cloned this repository.
+2.  `examples/outdoor.py`
+3.  `export sourcesdk=/path/to/windows/steam/sourcesdk/directory`
+4.  `tools/buildbsp.py --game tf2 outdoor.vmf`
+5.  If there are no errors, the map will be installed into your native copy of
+    the selected game (not the windows/wine copy; we only use the windows 
+    copy for compilation purposes) and launched.
+
 
 License
 -------

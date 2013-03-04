@@ -156,29 +156,86 @@ if __name__ == '__main__':
     elif linux:
         # Define constants
         games['tf2']['gamedir'] = os.path.join("Team Fortress 2", "tf")
+        games['css']['gamedir'] = os.path.join("Counter-Strike Source", "cstrike")
+        games['hl2']['gamedir'] = os.path.join("Half-Life 2", "hl2")
+        games['hl2mp']['gamedir'] = os.path.join("Half-Life 2 Deathmatch", "hl2mp")
+        games['gm']['gamedir'] = os.path.join("GarrysMod", "garrysmod")
+
+        # Environment to use with wine calls
+        env = os.environ.copy()
+        env['WINEPREFIX'] = os.path.expanduser("~/.winesteam")
+
+        # Define path-converting helper function
+        def unix2wine(path):
+            return subprocess.check_output(["winepath", '-w', '%s' % path], env=env).strip()
 
         # Environmental scan
-        sourcesdk = os.path.abspath(args.sourcesdk)
+        sourcesdk = args.sourcesdk
+        if not sourcesdk:
+            sourcesdk = os.getenv('sourcesdk')
+        if not sourcesdk:
+            print("You need to pass the --sourcesdk argument or set the $sourcesdk env variable.")
+            exit(-1)
+        sourcesdk = os.path.abspath(sourcesdk)
         steamapps = os.path.join(sourcesdk, '..')
         junk, username = os.path.split(os.path.abspath(steamapps))
         sdkbin = os.path.join(sourcesdk, "bin", "orangebox", "bin")
         game = games[args.game]
-        gamedir = os.path.join(steamapps, game['gamedir'])
+        gamedir = unix2wine(os.path.join(steamapps, game['gamedir']))
+        mappath = unix2wine(mappath)
 
         # Use native maps directory instead of wine's
         mapsdir = os.path.join('~', '.steam', 'steam', 'SteamApps', username, game['gamedir'], "maps")
+        mapsdir = os.path.expanduser(mapsdir)
 
         # Change working directory first because VBSP is dumb
         os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
 
-        # Environment to use with wine calls
-        env = os.environ.copy()
-        env['WINEPREFIX'] = "~/.winesteam"
-
         # Run the SDK tools
-        #TODO
-        exit(-1)
+        vbsp_exe = os.path.join(sdkbin, "vbsp.exe")
+        code = subprocess.call(['wine', vbsp_exe, '-game', gamedir, mappath], env=env)
+        print("VBSP finished with status %s." % code)
+
+        if code == 1:
+            print("\nLooks like SteamService isn't working. Try reopening (wine's copy of) Steam:")
+            steambin = os.path.abspath(os.path.join(steamapps, '..', '..', 'steam.exe'))
+            print('\nWINEPREFIX="%s" wine "%s" -no-dwrite' % (env['WINEPREFIX'], steambin))
+            exit(code)
+        elif code == -11:
+            print("\nLooks like you might have gotten the 'material not found' " +
+                "error messages. Try signing into Steam, or restarting it " +
+                "and signing in.")
+            exit(code)
+        elif code != 0:
+            print("\nLooks like VBSP crashed, but I'm not sure why.")
+            exit(code)
+
+        vvis_exe = os.path.join(sdkbin, "vvis.exe")
+        opts = ['wine', vvis_exe]
+        if args.fast:
+            opts.append('-fast')
+        opts.extend(['-game', gamedir, mappath])
+        code = subprocess.call(opts, env=env)
+
+        if code != 0:
+            print("\nLooks like VVIS crashed, but I'm not sure why.")
+            exit(code)
+
+        vrad_exe = os.path.join(sdkbin, "vrad.exe")
+        opts = ['wine', vrad_exe]
+        if args.fast:
+            opts.extend(['-bounce', '2', '-noextra'])
+        if args.hdr:
+            opts.append('-both')
+        if args.hdr and args.final:
+            opts.append('-final')
+        opts.extend(['-game', gamedir, mappath])
+        code = subprocess.call(opts, env=env)
         
+        if code != 0:
+            print("\nLooks like VRAD crashed, but I'm not sure why.")
+            exit(code)
+
         # Install the map to the game's map directory (unless --no-install)
         if not args.no_install:
             shutil.copy(bsp_file, mapsdir)
