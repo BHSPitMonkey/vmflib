@@ -39,8 +39,9 @@ class VmfClass:
 
         # Print auto properties (properties bound to instance attributes)
         for attr_name in self.auto_properties:
-            string += '%s"%s" "%s"\n' % (tab_prefix_inner,
-                attr_name, getattr(self, attr_name))
+            value = getattr(self, attr_name)
+            if value is not None:
+                string += '%s"%s" "%s"\n' % (tab_prefix_inner, attr_name, value)
 
         # Print properties
         for item in self.properties.items():
@@ -119,8 +120,9 @@ class Entity(VmfClass):
         VmfClass.__init__(self)
         self.classname = class_name
         self.spawnflags = 0
+        self.origin = None
 
-        self.auto_properties = ['classname', 'spawnflags']
+        self.auto_properties = ['classname', 'spawnflags', 'origin']
 
         p = self.properties
         p['id'] = Entity.entitycount

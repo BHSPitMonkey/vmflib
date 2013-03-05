@@ -18,8 +18,8 @@ from numpy.random import random_integers as rand
 
 # Maze map metrics
 maze_block_size = 128 # Hammer units
-maze_n = 40 # Maze grid "rows"
-maze_m = 40 # Maze grid "columns"
+maze_n = 41 # Maze grid "rows"
+maze_m = 41 # Maze grid "columns"
 maze_width = maze_block_size * maze_n
 maze_height = maze_block_size * maze_m
 block_dims = (maze_block_size, maze_block_size, maze_block_size)
@@ -54,7 +54,7 @@ def make_maze(width=81, height=51, complexity=.75, density=.75):
                     Z[y_ + (y - y_) // 2, x_ + (x - x_) // 2] = 1
                     x, y = x_, y_
     return Z
-maze = make_maze(maze_n, maze_m)
+maze = make_maze(maze_n-1, maze_m-1)
 
 # Floor
 floor = Block(Vertex(0, 0, -maze_block_size),
@@ -63,16 +63,15 @@ floor = Block(Vertex(0, 0, -maze_block_size),
 
 # Ceiling
 ceiling = Block(Vertex(0, 0, maze_block_size),
-                (maze_width, maze_height, maze_block_size),
-                'tools/toolsskybox2d')
+                (maze_width, maze_height, maze_block_size))
 
 # Maze blocks
 blocks = []
 for i in range(maze_n):
 	for j in range(maze_m):
 		if maze[i][j]:
-			x = (i * maze_block_size) - (maze_width / 2)
-			y = (j * maze_block_size) - (maze_height / 2)
+			x = (i * maze_block_size) - (maze_width / 2) + (maze_block_size / 2)
+			y = (j * maze_block_size) - (maze_height / 2) + (maze_block_size / 2)
 			blocks.append(Block(Vertex(x, y, 0), block_dims))
 
 # Instantiate a new map
@@ -83,7 +82,25 @@ m.world.children.extend(blocks)
 m.world.children.append(floor)
 m.world.children.append(ceiling)
 
-# TODO: Define team spawn entities at each end of the maze
+# Define RED spawn
+spawn_red = vmf.Entity('info_player_teamspawn')
+spawn_red.origin = "%s %s %s" % ((-maze_width / 2) + (maze_block_size * 1.5),
+                                 (-maze_height / 2) + (maze_block_size * 1.5),
+                                 0)
+spawn_red.properties['TeamNum'] = "2" # RED
+spawn_red.properties['angles'] = "0 45 0"
+
+# Define BLU spawn
+spawn_blu = vmf.Entity('info_player_teamspawn')
+spawn_blu.origin = "%s %s %s" % ((maze_width / 2) - (maze_block_size * 1.5),
+                                 (maze_height / 2) - (maze_block_size * 1.5),
+                                 0)
+spawn_blu.properties['TeamNum'] = "3" # BLU
+spawn_blu.properties['angles'] = "0 -135 0"
+
+# Add spawn entities to map
+m.children.append(spawn_red)
+m.children.append(spawn_blu)
 
 # Write the map to a file
 m.write_vmf('maze.vmf')
