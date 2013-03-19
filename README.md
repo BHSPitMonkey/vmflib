@@ -135,3 +135,6 @@ License
 
 vmflib is provided freely under the Simplified BSD License.
 See LICENSE for full details.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/BHSPitMonkey/vmflib/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
