@@ -35,7 +35,6 @@ light.properties['_light'] = "238 218 181 450"
 light.properties['_AmbientScaleHDR'] = "1"
 light.properties['_ambientHDR'] = "224 188 122 250"
 light.properties['_ambient'] = "224 188 122 250"
-m.children.append(light)
 
 # Ground
 ground = Block(Vertex(0, 0, -32), (2048, 2048, 64), 'nature/dirtground004')
@@ -68,14 +67,12 @@ spawn_red = vmf.Entity('info_player_teamspawn')
 spawn_red.origin = "900 900 10"
 spawn_red.properties['TeamNum'] = "2" # RED
 spawn_red.properties['angles'] = "0 -135 0"
-m.children.append(spawn_red)
 
 # Define BLU spawn
 spawn_blu = vmf.Entity('info_player_teamspawn')
 spawn_blu.origin = "-900 -900 10"
 spawn_blu.properties['TeamNum'] = "3" # BLU
 spawn_blu.properties['angles'] = "0 45 0"
-m.children.append(spawn_blu)
 
 # Write the map to a file
 m.write_vmf('koth_vmflib_example.vmf')
