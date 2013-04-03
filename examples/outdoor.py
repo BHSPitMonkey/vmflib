@@ -21,7 +21,6 @@ light.properties['origin'] = "0 0 0"
 light.properties['_ambient'] = "172 196 204 80"
 light.properties['_light'] = "254 242 160 400"
 light.properties['pitch'] = -25
-m.world.children.append(light)
 
 # Displacement map for the floor
 # do cool stuff

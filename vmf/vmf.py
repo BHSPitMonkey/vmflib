@@ -127,6 +127,10 @@ class Entity(VmfClass):
         p = self.properties
         p['id'] = Entity.entitycount
         Entity.entitycount += 1            # Increment entity counter
+        
+        # Add ourself to the active map
+        if ValveMap.instance:
+            ValveMap.instance.children.append(self)
 
 
 class Connections(VmfClass):
@@ -176,9 +180,11 @@ class ValveMap(VmfClass):
     """A class encapsulating the Valve Map Format (VMF)."""
 
     vmf_class_name = False                 # Document-level, has no class name
+    instance = None                        # Singleton instance
 
     def __init__(self):
         VmfClass.__init__(self)            # Superclass initializer
+        ValveMap.instance = self
 
         # These properties are objects that represent the basic structure
         # of a Valve Map.  Some of these are meant to contain many
@@ -186,7 +192,7 @@ class ValveMap(VmfClass):
         # level.
         #self.versioninfo = VersionInfo()
         #self.visgroups = VisGroups()
-        self.world = World()
+        self.world = World()    # Automatically added to map
         #self.hidden = 0
         self.cameras = Cameras()
         self.cordon = Cordon()
@@ -195,7 +201,6 @@ class ValveMap(VmfClass):
         c = self.children
         #c.append(self.versioninfo)
         #c.append(self.visgroups)
-        c.append(self.world)
         #c.append(self.hidden)
         c.append(self.cameras)
         c.append(self.cordon)
