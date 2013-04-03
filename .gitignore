@@ -3,6 +3,7 @@
 *~
 
 *.vmf
+*.vmx
 *.bsp
 *.log
 *.prt

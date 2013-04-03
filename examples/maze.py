@@ -98,9 +98,5 @@ spawn_blu.origin = "%s %s %s" % ((maze_width / 2) - (maze_block_size * 1.5),
 spawn_blu.properties['TeamNum'] = "3" # BLU
 spawn_blu.properties['angles'] = "0 -135 0"
 
-# Add spawn entities to map
-m.children.append(spawn_red)
-m.children.append(spawn_blu)
-
 # Write the map to a file
 m.write_vmf('maze.vmf')
