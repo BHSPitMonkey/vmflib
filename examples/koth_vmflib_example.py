@@ -58,7 +58,6 @@ cp_prop = vmf.Entity('prop_dynamic')
 cp_prop.origin = "0 0 0"
 cp_prop.properties['targetname'] = "prop_cap_1"
 cp_prop.properties['model'] = "models/props_gameplay/cap_point_base.mdl"
-m.children.append(cp_prop)
 # TODO
 
 # Player spawn areas
