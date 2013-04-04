@@ -18,6 +18,7 @@ https://developer.valvesoftware.com/wiki/TF2/King_of_the_Hill
 from vmf import *
 from vmf.types import Vertex
 from vmf.tools import Block
+import vmf.games.tf2 as tf2
 
 m = vmf.ValveMap()
 
@@ -63,15 +64,11 @@ m.children.append(cp_prop)
 # Player spawn areas
 
 # Define RED spawn
-spawn_red = vmf.Entity('info_player_teamspawn')
-spawn_red.origin = "900 900 10"
-spawn_red.properties['TeamNum'] = "2" # RED
+spawn_red = tf2.SpawnPoint('red', (900, 900, 10))
 spawn_red.properties['angles'] = "0 -135 0"
 
 # Define BLU spawn
-spawn_blu = vmf.Entity('info_player_teamspawn')
-spawn_blu.origin = "-900 -900 10"
-spawn_blu.properties['TeamNum'] = "3" # BLU
+spawn_blu = tf2.SpawnPoint('blu', (-900, -900, 10))
 spawn_blu.properties['angles'] = "0 45 0"
 
 # Write the map to a file
