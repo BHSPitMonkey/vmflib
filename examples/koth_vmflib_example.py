@@ -2,19 +2,20 @@
 """Example map generator: King of the Hill Example
 
 This script demonstrates vmflib by generating a basic "king of the hill" style
-map.  "King of the hill" is a game mode in Team Fortress 2 where each team tries
-to maintain control of a central "control point" for some total defined amount
-of time (before the other team does).
+map.  "King of the hill" is a game mode in Team Fortress 2 where each team
+tries to maintain control of a central "control point" for some total defined
+amount of time (before the other team does).
 
 After this script executes, the map will be written to: koth_vmflib_example.vmf
 
 This example highlights the use of TF2 game mechanics (in this case the use of
-a control point and a goal timer). A simple implementation of team 
+a control point and a goal timer). A simple implementation of team
 spawn/resupply areas is also included.
 
 https://developer.valvesoftware.com/wiki/Creating_a_Capture_Point
 https://developer.valvesoftware.com/wiki/TF2/King_of_the_Hill
 """
+
 from vmf import *
 from vmf.types import Vertex
 from vmf.tools import Block
