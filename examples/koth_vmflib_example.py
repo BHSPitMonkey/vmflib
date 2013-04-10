@@ -17,7 +17,7 @@ https://developer.valvesoftware.com/wiki/TF2/King_of_the_Hill
 """
 
 from vmf import *
-from vmf.types import Vertex, Output
+from vmf.types import Vertex, Output, Origin
 from vmf.tools import Block
 import vmf.games.source as source
 import vmf.games.tf2 as tf2
@@ -58,12 +58,31 @@ for wall in skybox:
     wall.set_material('tools/toolsskybox2d')
 m.world.children.extend(skybox)
 
+# Control point master entity
+cp_master = tf2.MasterControlPoint()
+
+# Control point entity
+cp = tf2.ControlPoint()
+cp.targetname = "control_point_1"
+
 # Control point prop
 cp_prop = vmf.Entity('prop_dynamic')
-cp_prop.origin = "0 0 0"
-cp_prop.properties['targetname'] = "prop_cap_1"
+cp_prop.targetname = "prop_cap_1"
+cp_prop.origin = Origin()
 cp_prop.properties['model'] = "models/props_gameplay/cap_point_base.mdl"
-# TODO
+
+# Capture area
+cp_area = tf2.CaptureArea(cp)
+cp_area.children.append(Block(Vertex(0, 0, 128), (256, 256, 256), 
+    "TOOLS/TOOLSTRIGGER"))
+c = vmf.Connections()
+c.children.extend([
+    Output("OnCapTeam1", cp_prop.targetname, "Skin", 1),  # Not KOTH-specific
+    Output("OnCapTeam2", cp_prop.targetname, "Skin", 2),  # Not KOTH-specific
+    Output("OnCapTeam1", gr.targetname, "SetRedKothClockActive"),  # KOTH-only
+    Output("OnCapTeam2", gr.targetname, "SetBlueKothClockActive")  # KOTH-only
+])
+cp_area.children.append(c)
 
 # Player spawn areas
 

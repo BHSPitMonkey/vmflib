@@ -14,9 +14,9 @@ of time (before the other team does).
 
 This example highlights the use of TF2 game mechanics (in this case the use of
 a control point and a goal timer). A simple implementation of team 
-spawn/resupply areas is also included.
+spawn/resupply areas is also planned.
 
-![Screenshot](http://cloud-2.steampowered.com/ugc/846949759520062415/79CD57F5476B54A65564F46D6E6899EFC12FB4BA/)
+![Screenshot](http://cloud-2.steampowered.com/ugc/846950070908531474/C3CEA0E5F0735E08F5D6C4B406D637DAB06B921D/)
 
 ## maze
 
