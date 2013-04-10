@@ -19,9 +19,12 @@ https://developer.valvesoftware.com/wiki/TF2/King_of_the_Hill
 from vmf import *
 from vmf.types import Vertex
 from vmf.tools import Block
+import vmf.games.source as source
 import vmf.games.tf2 as tf2
 
 m = vmf.ValveMap()
+source.LogicAuto()
+tf2.GameRules()
 
 # Environment and lighting (these values come from Sky List on Valve dev wiki)
 # Sun angle  S Pitch  Brightness         Ambience
