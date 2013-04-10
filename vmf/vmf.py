@@ -121,8 +121,10 @@ class Entity(VmfClass):
         self.classname = class_name
         self.spawnflags = 0
         self.origin = None
+        self.targetname = None
 
-        self.auto_properties = ['classname', 'spawnflags', 'origin']
+        self.auto_properties = ['classname', 'spawnflags', 'origin', 
+            'targetname']
 
         p = self.properties
         p['id'] = Entity.entitycount
