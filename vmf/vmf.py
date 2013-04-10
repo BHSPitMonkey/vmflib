@@ -121,8 +121,10 @@ class Entity(VmfClass):
         self.classname = class_name
         self.spawnflags = 0
         self.origin = None
+        self.targetname = None
 
-        self.auto_properties = ['classname', 'spawnflags', 'origin']
+        self.auto_properties = ['classname', 'spawnflags', 'origin', 
+            'targetname']
 
         p = self.properties
         p['id'] = Entity.entitycount
@@ -136,12 +138,40 @@ class Entity(VmfClass):
 class Connections(VmfClass):
 
     """Represents a connections class for use within an Entity object.
-
-    Give this class properties with values of type Output (types.Output).
+    
+    This class behaves a little differently than the other VMF classes:
+    Its Key-Value entries have non-unique keys, so we can't model them using
+    dictionaries. This class's `children` array will contain Output objects
+    and we will print them in their own special way.
 
     """
 
     vmf_class_name = "connections"
+
+    # Render this class as a string
+    def __repr__(self, tab_level=-1):
+        string = ''
+
+        # Generate line prefixes (tab characters) for later
+        tab_prefix = ''
+        for i in range(tab_level):
+            tab_prefix += '\t'
+        tab_prefix_inner = tab_prefix + '\t'
+
+        # Generate class declaration and opening brace
+        if (self.vmf_class_name):
+            string += tab_prefix + self.vmf_class_name + '\n'
+            string += tab_prefix + '{\n'
+
+        # Print child groups
+        for output in self.children:
+            string += '%s%s\n' % (tab_prefix_inner, output)
+
+        # Print close brace
+        if (self.vmf_class_name):
+            string += tab_prefix + '}\n'
+
+        return string
 
 
 class World(Entity):

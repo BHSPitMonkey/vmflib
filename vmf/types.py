@@ -8,7 +8,7 @@ property values in a VMF map.
 
 class Vertex:
 
-    """An XYZ location given by 3 decimal values."""
+    """An XYZ location given by 3 decimal values and printed with parens."""
 
     def __init__(self, x=0, y=0, z=0):
         """Create a new Vertex representing the position (x, y, z)."""
@@ -18,6 +18,20 @@ class Vertex:
 
     def __repr__(self):
         return '(%s %s %s)' % (self.x, self.y, self.z)
+
+
+class Origin:
+
+    """An XYZ location given by 3 decimal values and printed without parens."""
+
+    def __init__(self, x=0, y=0, z=0):
+        """Create a new Origin representing the position (x, y, z)."""
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def __repr__(self):
+        return '%s %s %s' % (self.x, self.y, self.z)
 
 
 class Axis:
@@ -113,13 +127,15 @@ class Output:
     Example:
 
     >>> conn = vmf.Connections()
-    >>> conn.properties["OnTrigger"] = types.Output("bob", "ToggleSprite", "",
+    >>> conn.children.append(Output("OnTrigger", "bob", "ToggleSprite", "",
     ...     3.14, -1)
     >>> my_entity.children.append(conn)
 
     """
 
-    def __init__(self, target, input, parameter='', delay=0, times_to_fire=1):
+    def __init__(self, event, target, input, parameter='', delay=0, 
+        times_to_fire=-1):
+        self.event = event
         self.target = target
         self.input = input
         self.parameter = parameter
@@ -127,5 +143,5 @@ class Output:
         self.times_to_fire = times_to_fire
 
     def __repr__(self):
-        return '%s,%s,%s,%s,%s' % (self.target, self.input, self.parameter,
-            self.delay, self.times_to_fire)
+        return '"%s" "%s,%s,%s,%s,%s"' % (self.event, self.target, self.input,
+            self.parameter, self.delay, self.times_to_fire)
