@@ -18,3 +18,4 @@ class LogicAuto(Entity):
     def __init__(self):
         Entity.__init__(self, "logic_auto")
         self.origin = Origin()
+        self.spawnflags = 1
