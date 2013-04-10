@@ -80,6 +80,11 @@ do:
 * tools: Classes that provide higher-level management of brush geometry (just
   `Block` for now) These abstractions don't exist within the VMF spec, so it is
   up to the tool (e.g. Hammer, or this library) to manage them internally.
+* games: A package containing modules providing game-specific helper classes
+    * source: Classes that provide abstractions for entities used across all
+      Source Engine games.
+    * tf2: Classes that provide abstractions for entities specific to Team
+      Fortress 2 maps.
 
 
 Try an example
