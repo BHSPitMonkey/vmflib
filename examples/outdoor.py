@@ -9,6 +9,7 @@ from vmf import *
 from vmf.types import Vertex
 from vmf.tools import Block
 from vmf.brush import DispInfo
+import vmf.games.source as source
 
 m = vmf.ValveMap()
 
@@ -16,12 +17,8 @@ m = vmf.ValveMap()
 # Sun angle	S Pitch	Brightness		Ambience
 # 0 225 0	 -25	 254 242 160 400	172 196 204 80
 m.world.skyname = 'sky_day02_01'
-light = vmf.Entity('light_environment')
-light.origin = "0 0 0"
-light.properties['pitch'] = -25
-light.properties['angles'] = "0 225 0"
-light.properties['_light'] = "254 242 160 400"
-light.properties['_ambient'] = "172 196 204 80"
+light = source.LightEnvironment()
+light.set_all("0 225 0", -25, "254 242 160 400", "172 196 204 80")
 
 # Displacement map for the floor
 # do cool stuff

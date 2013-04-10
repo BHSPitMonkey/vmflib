@@ -31,16 +31,8 @@ tf2.LogicKoth(la, gr)
 # Sun angle  S Pitch  Brightness         Ambience
 # 0 300 0    -20      238 218 181 250    224 188 122 250
 m.world.skyname = 'sky_harvest_01'
-light = vmf.Entity('light_environment')
-light.origin = "0 0 0"
-light.properties['pitch'] = -20
-light.properties['angles'] = "0 300 0"
-light.properties['_lightscaleHDR'] = "238 218 181 450"
-light.properties['_lightHDR'] = "238 218 181 450"
-light.properties['_light'] = "238 218 181 450"
-light.properties['_AmbientScaleHDR'] = "1"
-light.properties['_ambientHDR'] = "224 188 122 250"
-light.properties['_ambient'] = "224 188 122 250"
+light = source.LightEnvironment()
+light.set_all("0 300 0", -20, "238 218 181 250", "224 188 122 250")
 
 # Ground
 ground = Block(Vertex(0, 0, -32), (2048, 2048, 64), 'nature/dirtground004')
