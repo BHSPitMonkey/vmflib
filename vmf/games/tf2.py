@@ -8,13 +8,13 @@ from vmf.vmf import Entity, Connections
 from vmf.types import Bool, Origin, Output
 
 class GameRules(Entity):
-    
+
     """Sets up game mechanics for TF2.
-    
+
     https://developer.valvesoftware.com/wiki/Tf_gamerules
-    
+
     """
-    
+
     def __init__(self):
         Entity.__init__(self, "tf_gamerules")
         self.origin = "0 0 0"
@@ -27,16 +27,16 @@ class GameRules(Entity):
 
 
 class LogicKoth(Entity):
-    
+
     """Activates King of the Hill mode.
-    
+
     logic_auto should be the map's source.LogicAuto object
     gamerules should be the map's tf2.GameRules object
-    
+
     https://developer.valvesoftware.com/wiki/Tf_logic_koth
-    
+
     """
-    
+
     def __init__(self, logic_auto, gamerules, respawn_wave_time=6):
         Entity.__init__(self, "tf_logic_koth")
         self.origin = "0 0 0"
@@ -84,7 +84,7 @@ class SpawnPoint(Entity):
 
 
 class MasterControlPoint(Entity):
-    
+
     def __init__(self):
         Entity.__init__(self, "team_control_point_master")
         self.origin = Origin()
@@ -104,7 +104,7 @@ class MasterControlPoint(Entity):
 
 
 class ControlPoint(Entity):
-    
+
     def __init__(self):
         Entity.__init__(self, "team_control_point")
         self.origin = Origin()
@@ -139,10 +139,10 @@ class ControlPoint(Entity):
 
 
 class CaptureArea(Entity):
-    
+
     def __init__(self, capture_point):
         Entity.__init__(self, "trigger_capture_area")
-        
+
         self.area_cap_point = capture_point.targetname
         self.area_time_to_cap = 10
         self.StartDisabled = 0
@@ -160,6 +160,31 @@ class CaptureArea(Entity):
             "team_numcap_3", "team_spawn_2", "team_spawn_3", "team_startcap_2",
             "team_startcap_3"]
 
+
+class HealthKit(Entity):
+
+    def __init__(self, size="medium", origin=(0, 0, 0)):
+        if size not in ("small", "medium", "full"):
+            raise Exception("Invalid HealthKit size!")
+        Entity.__init__(self, "item_healthkit_%s" % size)
+        self.origin = Origin(origin)
+
+        self.TeamNum = 0  # 2 for red, 3 for blu
+
+        self.auto_properties += ["TeamNum"]
+
+
+class AmmoPack(Entity):
+
+    def __init__(self, size="medium", origin=(0, 0, 0)):
+        if size not in ("small", "medium", "full"):
+            raise Exception("Invalid AmmoPack size!")
+        Entity.__init__(self, "item_ammopack_%s" % size)
+        self.origin = Origin(origin)
+
+        self.TeamNum = 0  # 2 for red, 3 for blu
+
+        self.auto_properties += ["TeamNum"]
 
 '''
 class CaptureArea(Entity):

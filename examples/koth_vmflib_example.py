@@ -79,12 +79,24 @@ cp_area.children.append(c)
 # Player spawn areas
 
 # Define RED spawn
-spawn_red = tf2.SpawnPoint('red', (900, 900, 10))
+spawn_red = tf2.SpawnPoint('red', (900, 900, 5))
 spawn_red.properties['angles'] = "0 -135 0"
 
+health_red = tf2.HealthKit("full", (950, 910, 0))
+health_red.TeamNum = 2
+
+ammo_red = tf2.AmmoPack("full", (910, 950, 0))
+ammo_red.TeamNum = 2
+
 # Define BLU spawn
-spawn_blu = tf2.SpawnPoint('blu', (-900, -900, 10))
+spawn_blu = tf2.SpawnPoint('blu', (-900, -900, 5))
 spawn_blu.properties['angles'] = "0 45 0"
+
+health_blu = tf2.HealthKit("full", (-950, -910, 0))
+health_blu.TeamNum = 3
+
+ammo_blu = tf2.AmmoPack("full", (-910, -950, 0))
+ammo_blu.TeamNum = 3
 
 # Write the map to a file
 m.write_vmf('koth_vmflib_example.vmf')

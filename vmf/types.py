@@ -26,9 +26,12 @@ class Origin:
 
     def __init__(self, x=0, y=0, z=0):
         """Create a new Origin representing the position (x, y, z)."""
-        self.x = x
-        self.y = y
-        self.z = z
+        if type(x) == tuple:
+            self.x, self.y, self.z = x
+        else:
+            self.x = x
+            self.y = y
+            self.z = z
 
     def __repr__(self):
         return '%s %s %s' % (self.x, self.y, self.z)
