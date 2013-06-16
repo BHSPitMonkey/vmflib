@@ -110,9 +110,6 @@ if __name__ == '__main__':
         sourcesdk = os.path.abspath(sourcesdk)
     elif linux:
         sourcesdk = args.sourcesdk
-        # Define path-converting helper function
-        def unix2wine(path):
-            return subprocess.check_output(["winepath", '-w', '%s' % path], env=env).strip()
         if not sourcesdk:
             sourcesdk = os.getenv('sourcesdk')
         if not sourcesdk:
@@ -204,6 +201,10 @@ if __name__ == '__main__':
         # Environment to use with wine calls
         env = os.environ.copy()
         env['WINEPREFIX'] = os.path.expanduser("~/.winesteam")
+        
+        # Define path-converting helper function
+        def unix2wine(path):
+            return subprocess.check_output(["winepath", '-w', '%s' % path], env=env).strip()
         
         # Wine-ify some of our paths
         gamedir = unix2wine(gamedir)
