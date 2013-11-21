@@ -91,7 +91,7 @@ def _make_arg_parser():
 
     return parser
 
-if __name__ == '__main__':
+def main():
     parser = _make_arg_parser()
     args = parser.parse_args()
     vmf_file = os.path.abspath(args.map)
@@ -289,3 +289,6 @@ if __name__ == '__main__':
             print("Not launching game")
     else:
         raise OSError('Your OS is not supported yet!')
+
+if __name__ == '__main__':
+    main()
