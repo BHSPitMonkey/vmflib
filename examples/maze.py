@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#! /usr/bin/env python3
 """Example map generator: Maze
 
 This script demonstrates vmflib by generating a map that places the player

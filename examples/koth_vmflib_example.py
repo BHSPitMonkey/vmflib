@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#! /usr/bin/env python3
 """Example map generator: King of the Hill Example
 
 This script demonstrates vmflib by generating a basic "king of the hill" style
