@@ -1,4 +1,4 @@
-#!/usr/bin/python -i
+#!/usr/bin/python3 -i
 
 from vmf import *
 import vmf.tools as tools

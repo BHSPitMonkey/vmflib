@@ -9,9 +9,9 @@ is best known for its use in the Source Engine and its many games.
 Current Status
 --------------
 
-This project is far from completion, but there's already a bit you can do
-with it. See the **examples** directory for some easy-to-read demonstrations
-of how vmflib can be used to produce some basic maps.
+This project is far from feature-complete, but there's already a lot you can
+do with it. See the [examples](examples) directory for some easy-to-read
+demonstrations of how vmflib can be used to produce some basic maps.
 
 If there's something you wish to contribute, message me or send me a pull
 request. Contributions are welcome. If you're doing something with vmflib or
@@ -51,9 +51,9 @@ m.world.children.append(block)
 ```
 
 If you'd like to quickly start playing with vmflib interactively, simply
-navigate to the folder where you cloned this repository and run `test.py`:
+navigate to the folder where you cloned this repository and run `demo.py`:
 
-    $ ./test.py 
+    $ ./demo.py 
 
     You now have a clean ValveMap object to tinker with called "m".
     Try calling m.write_vmf("testmap.vmf") to output it as a VMF file.
