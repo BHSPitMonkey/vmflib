@@ -8,3 +8,8 @@
 *.log
 *.prt
 *.lin
+
+build/
+dist/
+*.egg-info/
+
