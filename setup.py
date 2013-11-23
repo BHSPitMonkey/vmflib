@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from setuptools import setup, find_packages
 
 setup(
@@ -19,5 +20,27 @@ setup(
     license = "BSD",
     keywords = "vmf valve map format source engine",
     url = "http://github.com/BHSPitMonkey/vmflib", 
-    # could also include long_description, download_url, classifiers, etc.
+    classifiers = [
+        "Programming Language :: Python :: 3",
+        "Development Status :: 3 - Alpha",
+        "Environment :: Other Environment",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Games/Entertainment",
+        ],
+    long_description = """\
+Tools for creating Valve Map Format (VMF) files
+-----------------------------------------------
+
+vmflib is a python module to help developers create maps for VMF-compatible 
+video games procedurally using Python. The VMF format is best known for its 
+use in the Source Engine and its many games.
+
+Also included is a script (buildbsp) to help automate the process of compiling
+and installing VMF maps into ready-to-use BSP files.
+
+This package requires Python 3 or later.
+"""
 )
