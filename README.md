@@ -1,8 +1,8 @@
-vmflib: a Python module for creating Valve Map Format (VMF) files
-=================================================================
+vmflib: a Python package for creating Valve Map Format (VMF) files
+==================================================================
 
-vmflib is a python module to help developers create maps for 
-VMF-compatible video games procedurally using Python. The VMF format
+vmflib is a python package to help developers create maps for 
+VMF-compatible video games procedurally using Python 3. The VMF format
 is best known for its use in the Source Engine and its many games.
 
 
@@ -25,7 +25,7 @@ Current functionality is pretty basic, but it's enough to get you by.
 This is the basic workflow:
 
 ```python
-import vmf
+from vmflib import vmf
 
 m = vmf.ValveMap()
 
@@ -43,8 +43,8 @@ m.world.skyname = 'sky_day01_01'
 Or create a Block and add it to the world:
 
 ```python
-from vmf.types import Vertex
-from vmf.tools import Block
+from vmflib.types import Vertex
+from vmflib.tools import Block
 
 block = Block(Vertex(0, 0, -512), (1024, 1024, 64), 'BRICK/BRICKFLOOR001A')
 m.world.children.append(block)
@@ -110,8 +110,8 @@ If you're using a basic Windows command prompt (cmd.exe):
 
 1.  `cd` into the `vmflib` directory where you cloned this repository.
 2.  `set PYTHONPATH=.`
-3.  `python examples\outdoor.py`
-4.  `python tools\buildbsp.py --game tf2 outdoor.vmf`
+3.  `python3 examples\outdoor.py`
+4.  `python3 tools\buildbsp.py --game tf2 outdoor.vmf`
 5.  If there are no errors, the map will be installed and the game will launch.
 
 If you're in a cygwin shell:
