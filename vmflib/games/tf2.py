@@ -4,8 +4,8 @@ Helper classes specific to creating maps for Team Fortress 2.
 
 """
 
-from vmf.vmf import Entity, Connections
-from vmf.types import Bool, Origin, Output
+from vmflib.vmf import Entity, Connections
+from vmflib.types import Bool, Origin, Output
 
 class GameRules(Entity):
 

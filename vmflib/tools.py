@@ -5,7 +5,7 @@ in the VMF format itself.
 
 """
 
-from vmf import brush, types
+from vmflib import brush, types
 
 
 class Block():

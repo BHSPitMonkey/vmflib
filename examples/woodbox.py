@@ -13,7 +13,7 @@ a demonstration.
 
 """
 
-from vmf import *
+from vmflib import *
 
 m = vmf.ValveMap()
 

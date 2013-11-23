@@ -5,11 +5,11 @@ This script demonstrates vmflib by generating a map with a 2D skybox and
 some terrain (a displacement map).
 
 """
-from vmf import *
-from vmf.types import Vertex
-from vmf.tools import Block
-from vmf.brush import DispInfo
-import vmf.games.source as source
+from vmflib import *
+from vmflib.types import Vertex
+from vmflib.tools import Block
+from vmflib.brush import DispInfo
+import vmflib.games.source as source
 
 m = vmf.ValveMap()
 

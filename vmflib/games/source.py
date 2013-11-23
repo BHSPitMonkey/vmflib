@@ -4,8 +4,8 @@ Helper classes for creating maps in any Source Engine game.
 
 """
 
-from vmf.vmf import Entity
-from vmf.types import Origin
+from vmflib.vmf import Entity
+from vmflib.types import Origin
 
 class LightEnvironment(Entity):
     
