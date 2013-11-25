@@ -16,7 +16,7 @@ This example highlights the use of TF2 game mechanics (in this case the use of
 a control point and a goal timer). A simple implementation of team 
 spawn/resupply areas is also planned.
 
-![Screenshot](http://cloud-2.steampowered.com/ugc/846950070908531474/C3CEA0E5F0735E08F5D6C4B406D637DAB06B921D/)
+![Screenshot](http://i.imgur.com/xsMwWRe.jpg)
 
 ## maze
 
@@ -27,7 +27,7 @@ this script, using
 
 This example also shows how team-specific spawn points can be defined.
 
-![Screenshot](http://cloud-2.steampowered.com/ugc/882975577032290990/09BFE0F9713A3C28446FB17C29A989FAFF747C1E/)
+![Screenshot](http://i.imgur.com/HIjDmPn.jpg)
 
 ## outdoor
 
@@ -45,7 +45,7 @@ a displacement map.  In this example, we just use (0 0 1) for all of the normal
 vectors (all of the displacements will be straight up along the Z axis) and a 
 simple math formula based on the row and column for the distances.
 
-![Screenshot](http://cloud-2.steampowered.com/ugc/882975388098105059/8C8283FB3889DD1DC6BC035FBA97F4CD0464A94B/)
+![Screenshot](http://i.imgur.com/FnwEuv2.jpg)
 
 ## woodbox_block
 
@@ -55,7 +55,7 @@ empty room.
 This example shows off the tools.Block class, which allows for the easy
 creation of 3D block brushes
 
-![Screenshot](http://cloud-2.steampowered.com/ugc/882975388098605721/AE8F89604470891EE23554C7B84116DC49F5A8DF/)
+![Screenshot](http://i.imgur.com/ln13v1V.jpg)
 
 ## woodbox
 
