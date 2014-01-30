@@ -16,7 +16,6 @@ Examples:
   python buildbsp.py --game tf2 --no-run --no-install --fast mymap.vmf
 
 """
-
 import argparse
 import sys
 import os
@@ -25,56 +24,43 @@ import webbrowser
 import urllib.parse
 import shutil
 
-win32 = sys.platform.startswith('win32')
-cygwin = sys.platform.startswith('cygwin')
-linux = sys.platform.startswith('linux')
-darwin = False  # Not supported yet
 
-games = {
-    'tf2': {
-        'id': 440,
-        'dir': os.path.join("Team Fortress 2", "tf"),
-        'common': True  # Game lives under "common" rather than "<username>"
-    },
-    'css': {
-        'id': 240,
-        'dir': os.path.join("Counter-Strike Source", "cstrike"),
-        'common': False
-    },
-    'hl2': {
-        'id': 220,
-        'dir': os.path.join("Half-Life 2", "hl2"),
-        'common': False
-    },
-    'hl2mp': {
-        'id': 320,
-        'dir': os.path.join("Half-Life 2 Deathmatch", "hl2mp"),
-        'common': False
-    },
-    'gm': {
-        'id': 4000,
-        'dir': os.path.join("GarrysMod", "garrysmod"),
-        'common': False
-    }
+class Game:
+    def __init__(self, id, dir, common, uses_sdk):
+        self.id = id              # Numeric Steam catalog ID number
+        self.dir = dir            # Path to inner game directory (containing gameinfo.txt)
+        self.common = common      # Game lives under "common" rather than "<username>"
+        self.uses_sdk = uses_sdk  # False if game ships with its own map compilers
+    def get_game_dir(self, username=False):
+        """Returns joined game directory path relative to Steamapps"""
+        if not self.common and not username:
+            raise RuntimeError("Can't determine this game's directory without username")
+        if self.common:
+            subdir = "common"
+        else:
+            subdir = "username"
+        subsubdir = self.dir
+        if WIN32 or CYGWIN:
+            subsubdir = subsubdir.lower()
+        return os.path.join(subdir, subsubdir)
+
+
+WIN32 = sys.platform.startswith('win32')
+CYGWIN = sys.platform.startswith('cygwin')
+LINUX = sys.platform.startswith('linux')
+DARWIN = False  # Not supported yet
+GAMES = {
+    'tf2': Game(440, os.path.join("Team Fortress 2", "tf"), True, False),
+    'css': Game(240, os.path.join("Counter-Strike Source", "cstrike"), False, False),
+    'hl2': Game(220, os.path.join("Half-Life 2", "hl2"), False, True),
+    'hl2mp': Game(320, os.path.join("Half-Life 2 Deathmatch", "hl2mp"), False, False),
+    'gm': Game(4000, os.path.join("GarrysMod", "garrysmod"), False, True),
 }
-
-def get_game_dir(game, username=False):
-    """Returns joined game directory path relative to Steamapps"""
-    if not games[game]['common'] and not username:
-        raise RuntimeError("Can't determine this game's directory without username")
-    if games[game]['common']:
-        subdir = "common"
-    else:
-        subdir = "username"
-    subsubdir = games[game]['dir']
-    if win32 or cygwin:
-        subsubdir = subsubdir.lower()
-    return os.path.join(subdir, subsubdir)
 
 def _make_arg_parser():
     parser = argparse.ArgumentParser(description='Build, install, and test a VMF map.')
     parser.add_argument('map')
-    parser.add_argument('-g', '--game', default='tf2', choices=games.keys(),
+    parser.add_argument('-g', '--game', default='tf2', choices=GAMES.keys(),
         help="selects which game to use")
     parser.add_argument('--no-run', action="store_true",
         help="don't run the game after building/installing")
@@ -86,56 +72,75 @@ def _make_arg_parser():
         help="enable full HDR compile")
     parser.add_argument('--final', action="store_true",
         help="use with --hdr for slow high-quality HDR compile")
-    parser.add_argument('--sourcesdk',
-        help="location of your sourcesdk folder (for linux/wine)")
+    parser.add_argument('--steam-windows-path',
+        help="path to your (Windows) Steam folder (for games not dependent on SDK)")
+    parser.add_argument('--username',
+        help="your Steam username (needed for some games)")
 
     return parser
 
 def main():
     parser = _make_arg_parser()
     args = parser.parse_args()
+    game = GAMES[args.game]
+    username = args.username  # May be None
     vmf_file = os.path.abspath(args.map)
     path, filename = os.path.split(vmf_file)
     mapname = filename[:-4]
     mappath = os.path.join(path, mapname)
     bsp_file = os.path.join(path, mapname + ".bsp")
-    
-    # Get sourcesdk path
-    if win32 or cygwin:
-        sourcesdk = os.environ['sourcesdk']
-        if cygwin:
+    sourcesdk = None
+    winsteam = args.steam_windows_path
+    if not winsteam:
+        winsteam = os.getenv('winsteam')
+
+    # We need to find out where the SteamApps directory is.
+    if winsteam:
+        steamapps = os.path.join(winsteam, "Steamapps")
+        if not os.path.isdir(steamapps):  # Try lowercase
+            steamapps = os.path.join(winsteam, "steamapps")
+        if not os.path.isdir(steamapps):
+            raise Exception(
+                "The provided Steam directory does not contain a Steamapps directory: %s" %
+                os.path.abspath(winsteam)
+            )
+    elif WIN32 or CYGWIN:
+        sourcesdk = os.getenv('sourcesdk')
+        if CYGWIN:
             def cygwin2dos(path):
                 return subprocess.check_output(["cygpath", '-w', '%s' % path], universal_newlines=True).strip()
             sourcesdk = subprocess.check_output(["cygpath", sourcesdk], universal_newlines=True).strip()
         sourcesdk = os.path.abspath(sourcesdk)
-    elif linux:
-        sourcesdk = args.sourcesdk
-        if not sourcesdk:
-            sourcesdk = os.getenv('sourcesdk')
-        if not sourcesdk:
-            print("You need to pass the --sourcesdk argument or set the $sourcesdk env variable.")
-            exit(-1)
-        sourcesdk = os.path.abspath(sourcesdk)
-    
-    # Collect some other useful paths and info
-    steamapps = os.path.dirname(os.path.dirname(sourcesdk)) # Full path to steamapps dir
-    username = os.path.basename(os.path.dirname(sourcesdk))
-    sdkbin = os.path.join(sourcesdk, "bin", "orangebox", "bin")
-    game = games[args.game]
-    gamedir = os.path.join(steamapps, get_game_dir(args.game, username))
+        steamapps = os.path.dirname(os.path.dirname(sourcesdk))
+        if not os.path.isdir(steamapps):
+            raise Exception("Steamapps directory could not be found. Please specify using --steam-windows-path or see --help.")
+        if not username:
+            username = os.path.basename(os.path.dirname(sourcesdk))
+    else:
+        raise Exception("Unable to determine where your (Windows) Steam installation is located. See --help.")
+    steamapps = os.path.abspath(steamapps)
+
+    # Prepare some useful paths
+    gamedir = os.path.join(steamapps, game.get_game_dir(username))
     mapsdir = os.path.join(gamedir, "maps")
 
-    # TF2 SteamPipe workaround
-    if args.game == 'tf2':
-        sdkbin = os.path.join(os.path.dirname(gamedir), "bin")
+    # Get path to correct bin tools directory (game or SDK)
+    if game.uses_sdk:
+        if not sourcesdk:
+            # Try finding SDK within Steamapps
+            # TODO
+            raise Exception("Sorry, SDK games aren't implemented right now unless you're on Windows.")
+        toolsdir = os.path.join(sourcesdk, "bin", "orangebox", "bin")
+    else:
+        toolsdir = os.path.abspath(os.path.join(gamedir, "..", "bin"))
     
     # Make sure gamedir path seems legit
     if not os.path.isfile(os.path.join(gamedir, "gameinfo.txt")):
         raise Exception("Game directory does not contain a gameinfo.txt: %s" % gamedir)
-    
-    if win32 or cygwin:
+
+    if WIN32 or CYGWIN:
         # Convert some paths if using Cygwin
-        if cygwin:
+        if CYGWIN:
             gamedir = cygwin2dos(gamedir)
             mappath = cygwin2dos(mappath)
 
@@ -143,7 +148,7 @@ def main():
         os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
 
         # Run the SDK tools
-        vbsp_exe = os.path.join(sdkbin, "vbsp.exe")
+        vbsp_exe = os.path.join(toolsdir, "vbsp.exe")
         code = subprocess.call([vbsp_exe, '-game', gamedir, mappath])
         print("VBSP finished with status %s." % code)
 
@@ -159,14 +164,14 @@ def main():
             print("Looks like VBSP crashed, but I'm not sure why.")
             exit(code)
 
-        vvis_exe = os.path.join(sdkbin, "vvis.exe")
+        vvis_exe = os.path.join(toolsdir, "vvis.exe")
         opts = [vvis_exe]
         if args.fast:
             opts.append('-fast')
         opts.extend(['-game', gamedir, mappath])
         subprocess.call(opts)
 
-        vrad_exe = os.path.join(sdkbin, "vrad.exe")
+        vrad_exe = os.path.join(toolsdir, "vrad.exe")
         opts = [vrad_exe]
         if args.fast:
             opts.extend(['-bounce', '2', '-noextra'])
@@ -197,7 +202,7 @@ def main():
                 print("Or, just run 'map %s' in the in-game console." % mapname)
         else:
             print("Not launching game")
-    elif linux:
+    elif LINUX:
         # Environment to use with wine calls
         env = os.environ.copy()
         env['WINEPREFIX'] = os.path.expanduser("~/.winesteam")
@@ -216,11 +221,11 @@ def main():
         #print("WINEDLLPATH is as follows: ", env['WINEDLLPATH'])
 
         # Use native maps directory instead of the Wine installation's
-        mapsdir = os.path.join('~', '.steam', 'steam', 'SteamApps', get_game_dir(args.game, username), "maps")
+        mapsdir = os.path.join('~', '.steam', 'steam', 'SteamApps', game.get_game_dir(username), "maps")
         mapsdir = os.path.expanduser(mapsdir)
 
         # Change working directory first because VBSP is dumb
-        os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
+        #os.chdir(os.path.join(sourcesdk, 'bin', 'orangebox'))
         
         print("Using -game dir: %s" % gamedir)
         
@@ -228,13 +233,14 @@ def main():
         env['VPROJECT'] = gamedir
 
         # Run the SDK tools
-        vbsp_exe = os.path.join(sdkbin, "vbsp.exe")
+        vbsp_exe = os.path.join(toolsdir, "vbsp.exe")
         code = subprocess.call(['wine', vbsp_exe, '-game', gamedir, mappath], env=env)
         print("VBSP finished with status %s." % code)
 
         # Handle various exit status codes VBPS may have returned
         if code == 1:
-            print("\nLooks like SteamService isn't working. Try reopening (wine's copy of) Steam:")
+            print("\nLooks like VBSP crashed, possibly due to invalid geometry in the map. Check the output above.")
+            print("\It could also be related to SteamService isn't working. Try re(launching) wine's Steam:")
             steambin = os.path.join(os.path.dirname(steamapps), 'steam.exe')
             print('\nWINEPREFIX="%s" wine "%s" -no-dwrite' % (env['WINEPREFIX'], steambin))
             exit(code)
@@ -247,7 +253,7 @@ def main():
             print("\nLooks like VBSP crashed, but I'm not sure why.")
             exit(code)
 
-        vvis_exe = os.path.join(sdkbin, "vvis.exe")
+        vvis_exe = os.path.join(toolsdir, "vvis.exe")
         opts = ['wine', vvis_exe]
         if args.fast:
             opts.append('-fast')
@@ -258,7 +264,7 @@ def main():
             print("\nLooks like VVIS crashed, but I'm not sure why.")
             exit(code)
 
-        vrad_exe = os.path.join(sdkbin, "vrad.exe")
+        vrad_exe = os.path.join(toolsdir, "vrad.exe")
         opts = ['wine', vrad_exe]
         if args.fast:
             opts.extend(['-bounce', '2', '-noextra'])
@@ -282,7 +288,7 @@ def main():
         # Launch the game (unless --no-run or --no-install)
         if not args.no_run and not args.no_install:
             params = urllib.parse.quote("-dev -console -allowdebug +map %s" % mapname)
-            run_url = "steam://run/%d//%s" % (game['id'], params)
+            run_url = "steam://run/%d//%s" % (game.id, params)
             print(run_url)
             webbrowser.open(run_url)
         else:
